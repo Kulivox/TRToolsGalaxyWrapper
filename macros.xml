@@ -1,12 +1,12 @@
 <macros>
     <token name="@TRTOOLS_VERSION@">4.0.1</token>
-    <token name="@SAMTOOLS_VERSION@">1.15</token>
+    <token name="@SAMTOOLS_VERSION@">1.14</token>
     <token name="@PROFILE@">19.01</token>
 
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TRTOOLS_VERSION@">trtools</requirement>
-            <requirement type="package" version="@SAMTOOLS_VERSION@">trtools</requirement>
+            <requirement type="package" version="@SAMTOOLS_VERSION@">samtools</requirement>
         </requirements>
     </xml>
     <token name="@INDEX_VCFS@"><![CDATA[
@@ -16,5 +16,6 @@
 
         #for $file in $files:
             tabix -p vcf $file &&
+        #end for
     ]]></token>
 </macros>
