@@ -8,14 +8,14 @@
     <command detect_errors="aggressive"><![CDATA[
         @INDEX_VCFS@
         qcSTR
-            --vcf '$req.vcf'
-            --vcftype '$opt_basic.vcftype'
-            --out '$req.out'
+            --vcf '$main_params.vcf'
+            --vcftype '$main_params.vcftype'
+            --out '$main_params.out'
             #if $opt_basic.samples:
                 --samples '$opt_basic.samples'
             #end if
 
-            #if $popt_basic.period:
+            #if $opt_basic.period:
                 --period $opt_basic.period
             #end if
 
@@ -23,34 +23,32 @@
                 --quality '$q.quality'
             #end for
 
-            #if opt_advanced.refbias-binsize:
-                --refbias-binsize $opt_advanced.refbias-binsize
+            #if $opt_advanced.refbias_binsize:
+                --refbias-binsize $opt_advanced.refbias_binsize
             #end if
 
-            #if opt_advanced.refbias-metric:
-                --refbias-metric $opt_advanced.refbias-metric
+            #if $opt_advanced.refbias_metric:
+                --refbias-metric $opt_advanced.refbias_metric
             #end if
 
-            #if opt_advanced.refbias-mingts:
-                --refbias-mingts $opt_advanced.refbias-mingts
+            #if $opt_advanced.refbias_mingts:
+                --refbias-mingts $opt_advanced.refbias_mingts
             #end if
 
-            #if opt_advanced.refbias-mingts:
-                --refbias-mingts $opt_advanced.refbias-mingts
+            #if $opt_advanced.refbias_xrange_min:
+                --refbias-mingts $opt_advanced.refbias_xrange_min
             #end if
 
-            #if opt_advanced.refbias-mingts:
-                --refbias-mingts $opt_advanced.refbias-mingts
+            #if $opt_advanced.refbias_xrange_max:
+                --refbias-mingts $opt_advanced.refbias_xrange_max
             #end if
     ]]></command>
     <inputs>
-        <section name="req" title="Required arguments" expanded="true">
+        <section name="main_params" title="Most important parameters" expanded="true">
             <param argument="--vcf" type="data" format="vcf.gz" label="VCF file" help="VCF file to analyze"/>
-            <param argument="--out" type="text"  label="Output name prefix"
+            <param argument="--out" type="text" label="Output name prefix"
                    help="Output prefix for files generated"/>
-        </section>
-        <section name="opt_basic" title="Basic optional arguments" expanded="false">
-            <param argument="--vcftype" type="select"  label="Variant caller type of input VCF" help="
+             <param argument="--vcftype" type="select" label="Variant caller type of input VCF" help="
                         Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
                 <option value="auto">Auto</option>
                 <option value="gangstr">GangSTR</option>
@@ -59,6 +57,9 @@
                 <option value="eh">Expansion hunter</option>
                 <option value="popstr">PopSTR</option>
             </param>
+        </section>
+        <section name="opt_basic" title="Basic optional arguments" expanded="false">
+
             <param argument="--samples" type="data" format="txt" optional="true" label="List of samples to include"
                    help="File containing list of samples to include.
                      If not specified, all samples are used. Samples in the list that are not included in the input vcf or
@@ -81,20 +82,20 @@
                     <option value="per-call">Per call</option>
                 </param>
             </repeat>
-            <param argument="--refbias-binsize" optional="true" type="integer"
+            <param argument="--refbias-binsize" name="refbias_binsize" optional="true" type="integer"
                    help="Sets the binsize (in bp) used to bin x-axis values, which give the reference TR length. Default=5."/>
-            <param argument="--refbias-metric" type="select" optional="true" help="Determines which metric to use to summarize the
+            <param argument="--refbias-metric" name="refbias_metric" type="select" optional="true" help="Determines which metric to use to summarize the
             reference bias in each bin. Default=mean. Must be one of: mean or median.">
                 <option value="mean">Mean</option>
                 <option value="median">Median</option>
             </param>
-            <param argument="--refbias-mingts" optional="true" type="integer" value="100" help="Exclude points computed
+            <param argument="--refbias-mingts" name="refbias_mingts" optional="true" type="integer" help="Exclude points computed
              using fewer than this many genotypes.
              This option is meant to avoid plotting outlier points driven by bins with small numbers
               of TRs with that reference length. Default=100."/>
-            <param argument="--refbias-xrange-min" optional="true" type="integer"
+            <param argument="--refbias-xrange-min" name="refbias_xrange_min" optional="true" type="integer"
                    help="Exclude points corresponding to TRs with reference length less than this value."/>
-            <param argument="--refbias-mingts" optional="true" type="integer"
+            <param argument="--refbias-xrange-max" name="refbias_xrange_max" optional="true" type="integer"
                    help="Exclude points corresponding to TRs with reference length greater than this value."/>
         </section>
 
@@ -103,6 +104,7 @@
         <collection format="pdf" name="qcSTROutput" type="list" label="Output of qcSTR">
             <discover_datasets format="pdf" pattern="(?P&lt;designation&gt;.+)\.pdf"/>
         </collection>
+        <!--        <data format="pdf" name="out_file1"/>-->
 
     </outputs>
 
@@ -115,7 +117,57 @@
 
     </tests>
 
-    <help>test test test</help>
+    <help>
+        Tool for generating various QC plots for TR callsets
+        [-h] --vcf VCF --out OUT [--vcftype {gangstr,advntr,hipstr,eh,popstr,auto}] [--samples SAMPLES] [--period
+        PERIOD]
+        [--quality {per-locus,sample-stratified,per-sample,locus-stratified,per-call}] [--quality-ignore-no-call]
+        [--refbias-metric {mean,median}]
+        [--refbias-mingts REFBIAS_MINGTS] [--refbias-xrange-min REFBIAS_XRANGE_MIN] [--refbias-xrange-max
+        REFBIAS_XRANGE_MAX] [--refbias-binsize REFBIAS_BINSIZE]
+        [--numrecords NUMRECORDS] [--version]
+
+        optional arguments:
+        -h, --help show this help message and exit
+
+        Required arguments:
+        --vcf VCF VCF file to analyze.
+        --out OUT Output prefix for files generated
+
+        Optional input arguments:
+        --vcftype {gangstr,advntr,hipstr,eh,popstr,auto}
+        Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)
+        --samples SAMPLES File containing list of samples to include
+        --period PERIOD Only consider repeats with this motif length
+
+        Quality plot options:
+        --quality {per-locus,sample-stratified,per-sample,locus-stratified,per-call}
+        Which quality plot(s) to produce. May be specified more than once. See the README for more info (default: [])
+        --quality-ignore-no-call
+        Exclude no-calls and calls without quality scores from quality graph distributions instead of the default, which
+        is to include them as zero quality calls. Setting this can cause the plotting to crash if it
+        reduces the number of valid calls (in a strata) to &lt;= 1 (default: False)
+
+        Reference bias plot options:
+        --refbias-metric {mean,median}
+        Which metric to use for the y-axis on the reference bias plot. (default: mean)
+        --refbias-mingts REFBIAS_MINGTS
+        Don't compute points for the reference bias plot based on fewer than this many genotypes (default: 100)
+        --refbias-xrange-min REFBIAS_XRANGE_MIN
+        Minimum x-axis value (bp) to show on the reference bias plot (default: 0)
+        --refbias-xrange-max REFBIAS_XRANGE_MAX
+        Maximum x-axis value (bp) to show on the reference bias plot (default: 100)
+        --refbias-binsize REFBIAS_BINSIZE
+        Size (bp) of x-axis bins for the reference bias plot (default: 5)
+
+        Debug group:
+        --numrecords NUMRECORDS
+        Only process this many records
+
+        Version:
+        --version show program's version number and exit
+
+    </help>
 
 
     <citations>
