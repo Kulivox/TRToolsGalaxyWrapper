@@ -7,18 +7,50 @@
     <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
         @INDEX_VCFS@
-        qcSTR --vcf '$req.vcf' --vcftype $opt_basic.vcftype --out '$req.out'
+        qcSTR
+            --vcf '$req.vcf'
+            --vcftype '$opt_basic.vcftype'
+            --out '$req.out'
+            #if $opt_basic.samples:
+                --samples '$opt_basic.samples'
+            #end if
+
+            #if $popt_basic.period:
+                --period $opt_basic.period
+            #end if
+
+            #for $q in $opt_advanced.quality:
+                --quality '$q.quality'
+            #end for
+
+            #if opt_advanced.refbias-binsize:
+                --refbias-binsize $opt_advanced.refbias-binsize
+            #end if
+
+            #if opt_advanced.refbias-metric:
+                --refbias-metric $opt_advanced.refbias-metric
+            #end if
+
+            #if opt_advanced.refbias-mingts:
+                --refbias-mingts $opt_advanced.refbias-mingts
+            #end if
+
+            #if opt_advanced.refbias-mingts:
+                --refbias-mingts $opt_advanced.refbias-mingts
+            #end if
+
+            #if opt_advanced.refbias-mingts:
+                --refbias-mingts $opt_advanced.refbias-mingts
+            #end if
     ]]></command>
     <inputs>
         <section name="req" title="Required arguments" expanded="true">
             <param argument="--vcf" type="data" format="vcf.gz" label="VCF file" help="VCF file to analyze"/>
-            <param name="index_file" type="data" format="vcf.gz.tbi" label="Index of VCF file"
-                   help="Index of analyzed VCF"/>
-            <param argument="--out" type="text" name="out" label="Output name prefix"
+            <param argument="--out" type="text"  label="Output name prefix"
                    help="Output prefix for files generated"/>
         </section>
         <section name="opt_basic" title="Basic optional arguments" expanded="false">
-            <param argument="--vcftype" type="select" name="vcftype" label="Variant caller type of input VCF" help="
+            <param argument="--vcftype" type="select"  label="Variant caller type of input VCF" help="
                         Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
                 <option value="auto">Auto</option>
                 <option value="gangstr">GangSTR</option>
@@ -27,7 +59,7 @@
                 <option value="eh">Expansion hunter</option>
                 <option value="popstr">PopSTR</option>
             </param>
-            <param argument="--samples" type="data" optional="true" label="List of samples to include"
+            <param argument="--samples" type="data" format="txt" optional="true" label="List of samples to include"
                    help="File containing list of samples to include.
                      If not specified, all samples are used. Samples in the list that are not included in the input vcf or
                      are misspelled are silently ignored"/>
@@ -49,9 +81,9 @@
                     <option value="per-call">Per call</option>
                 </param>
             </repeat>
-            <param argument="--refbias-binsize" optional="true" type="integer" value="5"
+            <param argument="--refbias-binsize" optional="true" type="integer"
                    help="Sets the binsize (in bp) used to bin x-axis values, which give the reference TR length. Default=5."/>
-            <param argument="--refbias-metric" type="select" help="Determines which metric to use to summarize the
+            <param argument="--refbias-metric" type="select" optional="true" help="Determines which metric to use to summarize the
             reference bias in each bin. Default=mean. Must be one of: mean or median.">
                 <option value="mean">Mean</option>
                 <option value="median">Median</option>
