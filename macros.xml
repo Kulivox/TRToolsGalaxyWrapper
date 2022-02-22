@@ -1,6 +1,7 @@
 <macros>
     <token name="@TRTOOLS_VERSION@">4.0.1</token>
     <token name="@SAMTOOLS_VERSION@">1.15</token>
+    <token name="@PROFILE@">19.01</token>
 
     <xml name="requirements">
         <requirement type="package" version="@TRTOOLS_VERSION@">trtools</requirement>
