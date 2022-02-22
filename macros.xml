@@ -1,0 +1,17 @@
+<macros>
+    <token name="@TRTOOLS_VERSION@">4.0.1</token>
+    <token name="@SAMTOOLS_VERSION@">1.15</token>
+
+    <xml name="requirements">
+        <requirement type="package" version="@TRTOOLS_VERSION@">trtools</requirement>
+        <requirement type="package" version="@SAMTOOLS_VERSION@">trtools</requirement>
+    </xml>
+    <token name="@INDEX_VCFS@"><![CDATA[
+        ##prepare input and indices
+        #import os
+        #set files = [f for f in os.listdir('.') if os.path.isfile(f) and f.endswith(".vcf.gz")]
+
+        #for $file in $files:
+            tabix -p vcf $file
+    ]]></token>
+</macros>
