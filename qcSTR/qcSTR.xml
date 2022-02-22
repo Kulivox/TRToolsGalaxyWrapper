@@ -1,0 +1,97 @@
+<tool id="qcSTR" name="QCSTR" version="0.1.0" python_template_version="3.5">
+    <requirements>
+        <requirement type="package" version="4.0.1">trtools</requirement>
+    </requirements>
+    <command detect_errors="aggressive"><![CDATA[
+        qcSTR --vcf '$req.vcf' --vcftype $opt_basic.vcftype --out '$req.out'
+    ]]></command>
+    <inputs>
+        <section name="req" title="Required arguments" expanded="true">
+            <param argument="--vcf" type="data" format="vcf.gz" label="VCF file" help="VCF file to analyze"/>
+            <param name="index_file" type="data" format="vcf.gz.tbi" label="Index of VCF file"
+                   help="Index of analyzed VCF"/>
+            <param argument="--out" type="text" name="out" label="Output name prefix"
+                   help="Output prefix for files generated"/>
+        </section>
+        <section name="opt_basic" title="Basic optional arguments" expanded="false">
+            <param argument="--vcftype" type="select" name="vcftype" label="Variant caller type of input VCF" help="
+                        Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
+                <option value="auto">Auto</option>
+                <option value="gangstr">GangSTR</option>
+                <option value="advntr">Advntr</option>
+                <option value="hipstr">HipSTR</option>
+                <option value="eh">Expansion hunter</option>
+                <option value="popstr">PopSTR</option>
+            </param>
+            <param argument="--samples" type="data" optional="true" label="List of samples to include"
+                   help="File containing list of samples to include.
+                     If not specified, all samples are used. Samples in the list that are not included in the input vcf or
+                     are misspelled are silently ignored"/>
+            <param argument="--period" type="integer" optional="true" label="Restrict to TRs with this motif length"
+                   help="Restrict to TRs with this motif length. e.g. to restrict to dinucleotide repeats, use --period 2"/>
+        </section>
+        <section name="opt_advanced" title="Plot related optional arguments" expanded="false">
+            <repeat name="quality" title="Quality plots">
+                <param argument="--quality" type="select" label="type of quality plot to output"
+                       help="his option determines if the plot is stratified and what distribution the y-axis represents.
+                        The x-axis is always the quality score and the y-axis is always a decreasing CDF.
+                         This can be specified multiple times to produce
+                          multiple plots (e.g. --quality per-locus --quality per-sample).
+                           Each plot will have the specified type appended to the output filename.">
+                    <option value="per-locus">Per locus</option>
+                    <option value="sample-stratified">Sample stratified</option>
+                    <option value="per-sample">Per sample</option>
+                    <option value="locus-stratified">Locus stratified</option>
+                    <option value="per-call">Per call</option>
+                </param>
+            </repeat>
+            <param argument="--refbias-binsize" optional="true" type="integer" value="5"
+                   help="Sets the binsize (in bp) used to bin x-axis values, which give the reference TR length. Default=5."/>
+            <param argument="--refbias-metric" type="select" help="Determines which metric to use to summarize the
+            reference bias in each bin. Default=mean. Must be one of: mean or median.">
+                <option value="mean">Mean</option>
+                <option value="median">Median</option>
+            </param>
+            <param argument="--refbias-mingts" optional="true" type="integer" value="100" help="Exclude points computed
+             using fewer than this many genotypes.
+             This option is meant to avoid plotting outlier points driven by bins with small numbers
+              of TRs with that reference length. Default=100."/>
+            <param argument="--refbias-xrange-min" optional="true" type="integer"
+                   help="Exclude points corresponding to TRs with reference length less than this value."/>
+            <param argument="--refbias-mingts" optional="true" type="integer"
+                   help="Exclude points corresponding to TRs with reference length greater than this value."/>
+        </section>
+
+    </inputs>
+    <outputs>
+        <collection format="pdf" name="qcSTROutput" type="list" label="Output of qcSTR">
+            <discover_datasets format="pdf" pattern="(?P&lt;designation&gt;.+)\.pdf"/>
+        </collection>
+
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+            <param name="index_file" value="NA12878_chr21_hipstr.sorted.vcf.gz.tbi"/>
+            <param name="vcftype" value="hipstr"/>
+        </test>
+
+    </tests>
+
+    <help>test test test</help>
+
+
+    <citations>
+        <citation type="bibtex">
+            @misc{TRTools: a toolkit for genome-wide analysis of tandem repeats,
+            author = {Nima Mousavi, Jonathan Margoliash, Neha Pusarla, Shubham Saini, Richard Yanicky, Melissa Gymrek},
+            year = {2020},
+            title = {TRTools},
+            publisher = {GitHub},
+            journal = {GitHub repository},
+            url = {https://github.com/gymreklab/trtools},
+            }
+        </citation>
+    </citations>
+</tool>
