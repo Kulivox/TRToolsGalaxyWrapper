@@ -1,8 +1,12 @@
-<tool id="qcSTR" name="QCSTR" version="0.1.0" python_template_version="3.5">
-    <requirements>
-        <requirement type="package" version="4.0.1">trtools</requirement>
-    </requirements>
+<tool id="qcSTR" name="qcSTR" version="@TRTOOLS_VERSION@" python_template_version="3.5">
+    <description>qcSTR generates plots that are useful for diagnosing issues in TR calling.</description>
+    <macros>
+        <import>../macros.xml</import>
+    </macros>
+
+    <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
+        @INDEX_VCFS@
         qcSTR --vcf '$req.vcf' --vcftype $opt_basic.vcftype --out '$req.out'
     ]]></command>
     <inputs>
