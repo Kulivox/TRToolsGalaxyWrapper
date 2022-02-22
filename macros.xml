@@ -4,8 +4,10 @@
     <token name="@PROFILE@">19.01</token>
 
     <xml name="requirements">
-        <requirement type="package" version="@TRTOOLS_VERSION@">trtools</requirement>
-        <requirement type="package" version="@SAMTOOLS_VERSION@">trtools</requirement>
+        <requirements>
+            <requirement type="package" version="@TRTOOLS_VERSION@">trtools</requirement>
+            <requirement type="package" version="@SAMTOOLS_VERSION@">trtools</requirement>
+        </requirements>
     </xml>
     <token name="@INDEX_VCFS@"><![CDATA[
         ##prepare input and indices
@@ -13,6 +15,6 @@
         #set files = [f for f in os.listdir('.') if os.path.isfile(f) and f.endswith(".vcf.gz")]
 
         #for $file in $files:
-            tabix -p vcf $file
+            tabix -p vcf $file &&
     ]]></token>
 </macros>
