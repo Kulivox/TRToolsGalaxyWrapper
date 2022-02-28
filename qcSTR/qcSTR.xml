@@ -111,8 +111,14 @@
     <tests>
         <test>
             <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+            <param name="out" value="test"/>
             <param name="index_file" value="NA12878_chr21_hipstr.sorted.vcf.gz.tbi"/>
             <param name="vcftype" value="hipstr"/>
+            <output_collection name="qcSTROutput" type="list">
+                <element name="test-diffref-bias" file="test-diffref-bias.pdf" ftype="pdf" />
+                <element name="test-diffref-histogram" file="test-diffref-histogram.pdf" ftype="pdf" />
+                <element name="test-quality" file="test-quality.pdf" ftype="pdf" />
+            </output_collection>
         </test>
 
     </tests>
@@ -163,9 +169,6 @@
         Debug group:
         --numrecords NUMRECORDS
         Only process this many records
-
-        Version:
-        --version show program's version number and exit
 
     </help>
 
