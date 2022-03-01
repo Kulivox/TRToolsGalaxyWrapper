@@ -1,7 +1,7 @@
 <tool id="qcSTR" name="qcSTR" version="@TRTOOLS_VERSION@" python_template_version="3.5">
     <description>qcSTR generates plots that are useful for diagnosing issues in TR calling.</description>
     <macros>
-        <import>../macros.xml</import>
+        <import>macros.xml</import>
     </macros>
 
     <expand macro="requirements"/>
@@ -42,13 +42,14 @@
             #if $opt_advanced.refbias_xrange_max:
                 --refbias-mingts $opt_advanced.refbias_xrange_max
             #end if
+            1> $stdout 2> $stderr
     ]]></command>
     <inputs>
         <section name="main_params" title="Most important parameters" expanded="true">
-            <param argument="--vcf" type="data" format="vcf.gz" label="VCF file" help="VCF file to analyze"/>
-            <param argument="--out" type="text" label="Output name prefix"
+            <param argument="--vcf" name="vcf" type="data" format="vcf.gz" label="VCF file" help="VCF file to analyze"/>
+            <param argument="--out" name="out" type="text" label="Output name prefix"
                    help="Output prefix for files generated"/>
-             <param argument="--vcftype" type="select" label="Variant caller type of input VCF" help="
+             <param argument="--vcftype" name="vcftype" type="select" label="Variant caller type of input VCF" help="
                         Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
                 <option value="auto">Auto</option>
                 <option value="gangstr">GangSTR</option>
@@ -101,6 +102,8 @@
 
     </inputs>
     <outputs>
+        <data name="stdout" format="txt" />
+        <data name="stderr" format="txt" />
         <collection format="pdf" name="qcSTROutput" type="list" label="Output of qcSTR">
             <discover_datasets format="pdf" pattern="(?P&lt;designation&gt;.+)\.pdf"/>
         </collection>
@@ -112,12 +115,30 @@
         <test>
             <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
             <param name="out" value="test"/>
-            <param name="index_file" value="NA12878_chr21_hipstr.sorted.vcf.gz.tbi"/>
             <param name="vcftype" value="hipstr"/>
-            <output_collection name="qcSTROutput" type="list">
-                <element name="test-diffref-bias" file="test-diffref-bias.pdf" ftype="pdf" />
-                <element name="test-diffref-histogram" file="test-diffref-histogram.pdf" ftype="pdf" />
-                <element name="test-quality" file="test-quality.pdf" ftype="pdf" />
+            <output name="stdout" file="output.txt" />
+            <output_collection name="qcSTROutput" type="list" count="3">
+                <element name="test-diffref-bias"  ftype="pdf">
+                    <assert_contents>
+                        <has_size value="12600" delta="300" />
+                        <has_text text="%PDF" />
+                        <has_text text="%%EOF" />
+                    </assert_contents>
+                </element>
+                <element name="test-diffref-histogram"  ftype="pdf">
+                    <assert_contents>
+                        <has_size value="11400" delta="300" />
+                        <has_text text="%PDF" />
+                        <has_text text="%%EOF" />
+                    </assert_contents>
+                </element>
+                <element name="test-quality"  ftype="pdf">
+                    <assert_contents>
+                        <has_size value="11900" delta="300" />
+                        <has_text text="%PDF" />
+                        <has_text text="%%EOF" />
+                    </assert_contents>
+                </element>
             </output_collection>
         </test>
 
