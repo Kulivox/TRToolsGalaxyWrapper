@@ -1,13 +1,113 @@
-<tool id="compareSTR" name="CompareSTR - TRTools" version="0.1.0" python_template_version="3.5">
-    <requirements>
-    </requirements>
-    <command detect_errors="exit_code"><![CDATA[
-        TODO: Fill in command template.
-    ]]></command>
+<tool id="compareSTR" name="CompareSTR - TRTools" version="@TRTOOLS_VERSION@" python_template_version="3.5">
+    <description>qcSTR generates plots that are useful for diagnosing issues in TR calling.</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <expand macro="requirements"/>
+    <command detect_errors="aggressive"><![CDATA[
+    cp '$required.vcf1' '${required.vcf1}.vcf.gz' &&
+    cp '$required.vcf2' '${required.vcf2}.vcf.gz' &&
+    tabix -f -p vcf '${required.vcf1}.vcf.gz' &&
+    tabix -f -p vcf '${required.vcf2}.vcf.gz' &&
+
+    compareSTR
+    --vcf1 '${required.vcf1}.vcf.gz'
+    --vcf2 '${required.vcf2}.vcf.gz'
+    --out '$required.out'
+    #if $filtering.samples:
+        --samples '$filtering.samples'
+    #end if
+
+    #if $filtering.region:
+        --region '$filtering.region'
+    #end if
+
+    #if $stratification.stratify_fields:
+    --stratify-fields '$stratification.stratify_fields'
+    #end if
+
+    #if $stratification.stratify_binsizes:
+    --stratify-binsizes '$stratification.stratify_binsizes'
+    #end if
+
+    #if str($stratification.stratify_file):
+        --stratify-file $stratification.stratify_file#end if
+    #if str($stratification.period):
+        --period $stratification.period#end if
+    #if str($plotting.bubble_min):
+        --bubble-min $plotting.bubble_min#end if
+    #if str($plotting.bubble_max):
+        --bubble-max $plotting.bubble_max#end if
+    
+    #if $other.verbose:
+        --verbose
+    #end if
+    
+    #if $other.noplot:
+        --noplot
+    #end if
+
+    --vcftype1 $other.vcftype1
+    --vcftype2 $other.vcftype2
+
+    1> $stdout 2> $stderr
+    ]]>
+    </command>
+
     <inputs>
+        <section name="required" title="Required parameters" expanded="true">
+            <param argument="--vcf1" type="data" format="vcf.gz" label="VCF file" help="First VCF file to compare"/>
+            <param argument="--vcf2" type="data" format="vcf.gz" label="VCF file" help="Second VCF file to compare"/>
+            <param argument="--out" type="text" label="Output name prefix"
+                   help="Prefix to name output files"/>
+        </section>
+        <section name="filtering" title="Filtering Options">
+             <param argument="--samples" type="data" format="txt" optional="true" label="List of samples to include"
+                   help="File containing list of samples to include. If not specified, all samples are used"/>
+             <param argument="--region" type="text" optional="true" label="Calculation restricted to this region"
+                   help="Restrict to this region chrom:start-end"/>
+        </section>
+         <section name="stratification" title="Metrics to stratify results">
+            <param argument="--stratify-fields" type="text" optional="true" label="List of FORMAT fields to strafy by"
+                   help="Comma-separated list of FORMAT fields to stratify by. e.g. DP,Q"/>
+            <param argument="--stratify-binsizes" type="text" label="Comma-separated list of min:max:binsize to stratify each field on."
+             help="Comma-separated list of min:max:binsize to stratify each field on. Must be same length as --stratify-fields. e.g. 0:50:5,0:1:0.1 . The range [min, max] is inclusive" />
+             <param argument="--stratify-file" type="integer" optional="true" label="Specify which file to look at the --stratify-fields" help="Specify which file to look at the --stratify-fields in. If set to 0, apply to both files. If set to 1, apply only to --vcf1. If set to 2, apply only to --vcf2." />
+             <param argument="--period" type="integer" optional="true" label="Report results overall and also stratified by repeat unit length (period)" help="Report results overall and also stratified by repeat unit length (period)" />
+        </section>
+         <section name="plotting" title="Plotting options">
+            <param argument="--bubble-min" type="float" optional="true" label="Minimum x/y axis value to display on bubble plots" />
+            <param argument="--bubble-max" type="float" optional="true" label="Maximum x/y axis value to display on bubble plots" />
+        </section>
+        <section name="other" title="Other options">
+            <param argument="--verbose" type="boolean" optional="true" label="Print helpful debugging info" />
+            <param argument="--noplot" type="boolean" optional="true" label="Don't output any plots. Only produce text output" />
+            <param argument="--vcftype1" name="vcftype1" type="select" label="Variant caller type of first VCF" help="
+                        Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
+                        <expand macro="vcfTypes"/>
+            </param>
+            <param argument="--vcftype2" name="vcftype2" type="select" label="Variant caller type of second VCF" help="
+                        Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
+                        <expand macro="vcfTypes"/>
+            </param>
+        </section>
     </inputs>
+
     <outputs>
+        <data name="stdout" label="STDOUT output" format="txt" />
+        <data name="stderr" label="STDERR output" format="txt" />
+
+        <collection format="pdf" name="pdfOutput" type="list" label="PDF output">
+            <discover_datasets format="pdf" pattern="(?P&lt;designation&gt;.+)\.pdf"/>
+        </collection>
+
+        <collection format="tabular" name="tabularOutput" type="list" label="Text file output">
+            <discover_datasets  pattern="(?P&lt;designation&gt;.+)\.tab"/>
+        </collection>
     </outputs>
+
     <help><![CDATA[
         TODO: Fill in help.
     ]]></help>
