@@ -1,55 +1,228 @@
-<tool id="" name="" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
-    <description></description>
-    <xrefs>
-        <xref type="bio.tools"></xref>
-    </xrefs>
+<tool id="dumpSTR" name="DumpSTR - TRTools" version="@TRTOOLS_VERSION@" python_template_version="3.5">
+    <description>DumpSTR filters VCF files with TR genotypes, performing call-level and locus-level filtering,
+        and outputs a filtered VCF file.</description>
+
     <macros>
-        <token name="@TOOL_VERSION@">0.1.0</token>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <import>macros.xml</import>
     </macros>
-    <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
-    <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
-    <edam_topics>
-        <edam_topic>topic_TODO</edam_topic>
-    </edam_topics>
-    <edam_operations>
-        <edam_operation>operation_TODO</edam_operation>
-    </edam_operations>
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@"></requirement>
-    </requirements>
-    <command detect_errors="exit_code"><![CDATA[
-        ## TODO: Fill in command using Cheetah templates
-        ## Hint: Use [ctrl+alt+c] after defining the inputs/outputs to auto-generate some Cheetah boilerplate code for you.
-    ]]></command>
+
+    <expand macro="requirements"/>
+    
+    <command detect_errors="aggressive"><![CDATA[
+
+    ## Inputs
+    dumpSTR
+    --vcf '$main_params.vcf'
+    --out '$main_params.out'
+    --vcftype $main_params.vcftype
+
+    #if $main_params.zip:
+        --zip
+    #end if
+    
+    #if str($filter_opt.min_locus_callrate):
+        --min-locus-callrate $filter_opt.min_locus_callrate#end if
+    #if str($filter_opt.min_locus_hwep):
+        --min-locus-hwep $filter_opt.min_locus_hwep#end if
+    #if str($filter_opt.max_locus_het):
+        --max-locus-het $filter_opt.max_locus_het#end if
+
+    #if $filter_opt.use_length:
+        --use-length
+    #end if
+    
+    
+    #if $filter_opt.filter_regions:
+        --filter-regions '$filter_opt.filter_regions'
+    #end if
+
+    #if $filter_opt.filter_regions_names:
+        --filter-regions-names '$filter_opt.filter_regions_names'
+    #end if
+
+    #if $filter_opt.filter_hrun:
+        --filter-hrun
+    #end if
+
+    #if $filter_opt.drop_filtered:
+        --drop-filtered
+    #end if
+    
+    ## Outputs
+    1> $stdout 2> $stderr
+    ]]>
+    </command>
+
     <inputs>
+        <section name="main_params" title="Most important parameters" expanded="true">
+            <param argument="--vcf" name="vcf" type="data" format="vcf.gz" label="VCF file" help="VCF file to analyze"/>
+            <param argument="--out" name="out" type="text" label="Output name prefix"
+                   help="Output prefix for files generated"/>
+             <param argument="--vcftype" name="vcftype" type="select" label="Variant caller type of input VCF" help="
+                        Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
+                <option value="auto">Auto</option>
+                <option value="gangstr">GangSTR</option>
+                <option value="advntr">Advntr</option>
+                <option value="hipstr">HipSTR</option>
+                <option value="eh">Expansion hunter</option>
+                <option value="popstr">PopSTR</option>
+            </param>
+            <param argument="--zip" type="boolean" optional="true" label="Zip and index output"
+                   help="Output a bgzipped filtered VCF ($out.vcf.gz) and tabix index ($out.vcf.gz.tbi) instead of $out.vcf"/>
+            
+        </section>
+       
+        <section name="filter_opt" title="Filter options" expanded="false">
+           <param argument="--min-locus-callrate" type="float" optional="true" label="Filters loci with too few calls" help="Filters loci with too few calls" />
+           <param argument="--min-locus-hwep" type="float" optional="true" label="Filters loci with low heteroyzgosity" help="    Heterozygosity is equal to:
+
+           1 - ∑ip2i
+           
+           where p_i is the frequency of allele i" />
+           <param argument="--max-locus-het" type="float" optional="true" label="Filters loci with high heterozygosity" help="Filters loci with high heterozygosity" />
+           <param argument="--use-length" type="boolean" optional="true" label="Use allele lengths, rather than sequences" help="Use allele lengths, rather than sequences, to compute heterozygosity and HWE (only relevant for HipSTR, which reports sequence level differences in TR alleles)" />
+           <param argument="--filter-regions" type="text" optional="true" label="Filter TRs overlapping the specified set of regions." help="BEDFILE[,BEDFILE12,...] Must be used with --filter-regions-names. Can supply a comma-separated list to each to apply multiple region filters. Bed files must be sorted and tabix-indexed." />
+           <param argument="--filter-regions-names" type="text" optional="true" label="Filter names for each BED file specified in --filter-regions" help="Filter names for each BED file specified in --filter-regions" />
+           <param argument="--filter-hrun" type="boolean" optional="true" label="Filter repeats with long homopolymer runs" help="Only used for HipSTR VCF files otherwise ignored. Filters pentanucleotides with homopolymer runs of 5bp or longer, or hexanucleotides with homopolymer runs of 6bp or longer." />
+           <param argument="--drop-filtered" type="boolean" optional="true" label="Do not output loci that were filtered" help="boolean" />
+
+        </section>
+
+        <section name="filter_call_level" title="Call-level filters" expanded="false">
+            <!-- TODO Call level filters -->
+        </section>
     </inputs>
+
     <outputs>
+        <data name="stdout" label="STDOUT output" format="txt" />
+
+        <data name="main_output" label="Main output" >
+            <discover_datasets format="vcf" pattern="(?P&lt;designation&gt;.+)\.vcf" visible="true" assign_primary_output="true"/>
+            <discover_datasets format="tabular" pattern="(?P&lt;designation&gt;.+)\.tab" visible="true"/>
+        </data>
+
+        <data name="stderr" label="STDERR output" format="txt" >
+            <discover_datasets format="vcf_bgzip" pattern="(?P&lt;designation&gt;.+)\.vcf.gz" visible="true"/>
+            <discover_datasets format="tabix" pattern="(?P&lt;designation&gt;.+)\.vcf.gz.tbi" visible="true"/>
+        </data>
+
     </outputs>
-    <tests>
-        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
-    </tests>
+
     <help><![CDATA[
+    Tool for filtering and QC of TR genotypes
 
-.. class:: infomark
+    Input/output:
+    --vcf VCF             Input STR VCF file
+    --out OUT             Prefix for output files
+    --zip                 Produce a bgzipped and tabix indexed output VCF (default: False)
+    --vcftype VCFTYPE     Options=['gangstr', 'advntr', 'hipstr', 'eh', 'popstr'] (default: auto)
 
-**What it does**
+    Locus-level filters (tool agnostic):
+    --min-locus-callrate MIN_LOCUS_CALLRATE
+                            Minimum locus call rate
+    --min-locus-hwep MIN_LOCUS_HWEP
+                            Filter loci failing HWE at this p-value threshold
+    --min-locus-het MIN_LOCUS_HET
+                            Minimum locus heterozygosity
+    --max-locus-het MAX_LOCUS_HET
+                            Maximum locus heterozygosity
+    --use-length          Calculate per-locus stats (het, HWE) collapsing alleles by length (default: False)
+    --filter-regions FILTER_REGIONS
+                            Comma-separated list of BED files of regions to filter. Must be bgzipped and tabix indexed
+    --filter-regions-names FILTER_REGIONS_NAMES
+                            Comma-separated list of filter names for each BED filter file
+    --filter-hrun         Filter STRs with long homopolymer runs. (default: False)
+    --drop-filtered       Drop filtered records from output (default: False)
 
-TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)
-Hint: If you want, you can preview your help section using this online editor: http://rst.ninjs.org/
+    Call-level filters specific to HipSTR output:
+    --hipstr-max-call-flank-indel HIPSTR_MAX_CALL_FLANK_INDEL
+                            Maximum call flank indel rate
+    --hipstr-max-call-stutter HIPSTR_MAX_CALL_STUTTER
+                            Maximum call stutter rate
+    --hipstr-min-supp-reads HIPSTR_MIN_SUPP_READS
+                            Minimum supporting reads for each allele
+    --hipstr-min-call-DP HIPSTR_MIN_CALL_DP
+                            Minimum call coverage
+    --hipstr-max-call-DP HIPSTR_MAX_CALL_DP
+                            Maximum call coverage
+    --hipstr-min-call-Q HIPSTR_MIN_CALL_Q
+                            Minimum call quality score
 
-Usage
-.....
+    Call-level filters specific to GangSTR output:
+    --gangstr-min-call-DP GANGSTR_MIN_CALL_DP
+                            Minimum call coverage
+    --gangstr-max-call-DP GANGSTR_MAX_CALL_DP
+                            Maximum call coverage
+    --gangstr-min-call-Q GANGSTR_MIN_CALL_Q
+                            Minimum call quality score
+    --gangstr-expansion-prob-het GANGSTR_EXPANSION_PROB_HET
+                            Expansion prob-value threshold. Filters calls with probability of heterozygous expansion less than this
+    --gangstr-expansion-prob-hom GANGSTR_EXPANSION_PROB_HOM
+                            Expansion prob-value threshold. Filters calls with probability of homozygous expansion less than this
+    --gangstr-expansion-prob-total GANGSTR_EXPANSION_PROB_TOTAL
+                            Expansion prob-value threshold. Filters calls with probability of total expansion less than this
+    --gangstr-filter-span-only
+                            Filter out all calls that only have spanning read support (default: False)
+    --gangstr-filter-spanbound-only
+                            Filter out all reads except spanning and bounding (default: False)
+    --gangstr-filter-badCI
+                            Filter regions where the ML estimate is not in the CI (default: False)
+    --gangstr-readlen GANGSTR_READLEN
+                            Read length used (bp). Required if using --require-support
 
+    Call-level filters specific to adVNTR output:
+    --advntr-min-call-DP ADVNTR_MIN_CALL_DP
+                            Minimum call coverage
+    --advntr-max-call-DP ADVNTR_MAX_CALL_DP
+                            Maximum call coverage
+    --advntr-min-spanning ADVNTR_MIN_SPANNING
+                            Minimum spanning read count (SR field)
+    --advntr-min-flanking ADVNTR_MIN_FLANKING
+                            Minimum flanking read count (FR field)
+    --advntr-min-ML ADVNTR_MIN_ML
+                            Minimum value of maximum likelihood (ML field)
 
-**Input**
+    Call-level filters specific to ExpansionHunter output:
+    --eh-min-ADFL EH_MIN_ADFL
+                            Minimum number of flanking reads consistent with the allele
+    --eh-min-ADIR EH_MIN_ADIR
+                            Minimum number of in-repeat reads consistent with the allele
+    --eh-min-ADSP EH_MIN_ADSP
+                            Minimum number of spanning reads consistent with the allele
+    --eh-min-call-LC EH_MIN_CALL_LC
+                            Minimum call coverage
+    --eh-max-call-LC EH_MAX_CALL_LC
+                            Maximum call coverage
 
+    Call-level filters specific to PopSTR output:
+    --popstr-min-call-DP POPSTR_MIN_CALL_DP
+                            Minimum call coverage
+    --popstr-max-call-DP POPSTR_MAX_CALL_DP
+                            Maximum call coverage
+    --popstr-require-support POPSTR_REQUIRE_SUPPORT
+                            Require each allele call to have at least n supporting reads
 
-**Output**
+    Debugging parameters:
+    --num-records NUM_RECORDS
+                            Only process this many records
+    --die-on-warning      Quit if a record can't be parsed (default: False)
+    --verbose             Print out extra info (default: False)
 
+    Version:
+    --version             show program's version number and exit
+        ]]>
+    </help>
 
-    ]]></help>
-    <citations>
-        <citation type="doi"> </citation>
-    </citations>
+<citations>
+    <citation type="bibtex">
+        @misc{TRTools: a toolkit for genome-wide analysis of tandem repeats,
+        author = {Nima Mousavi, Jonathan Margoliash, Neha Pusarla, Shubham Saini, Richard Yanicky, Melissa Gymrek},
+        year = {2020},
+        title = {TRTools},
+        publisher = {GitHub},
+        journal = {GitHub repository},
+        url = {https://github.com/gymreklab/trtools},
+        }
+    </citation>
+</citations>
 </tool>
