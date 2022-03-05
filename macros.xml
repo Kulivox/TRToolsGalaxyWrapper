@@ -12,10 +12,25 @@
     <token name="@INDEX_VCFS@"><![CDATA[
         ##prepare input and indices
         #import os
-        #set files = [f for f in os.listdir('.') if os.path.isfile(f) and f.endswith(".vcf.gz")]
+        
+        #def get_new_vcf_names(vcf_paths):
+            #set result = []
+            #for $vcf in $vcf_paths:
+                #set $split_path = $os.path.basename(vcf)
+                #set new_file_name = f"tmp_{split_path.split('.')[0]}.vcf.gz"
+                $result.append($new_file_name)
+            #end for
 
-        #for $file in $files:
-            tabix -p vcf $file &&
-        #end for
+            #return $result
+        #end def
+
+        #def index_vcfs(old_paths, new_paths):
+            #for ($left, $right) in $zip($old_paths, $new_paths):
+                ln -sfn $left $right &&
+                tabix -f -p  vcf $right &&
+            #end for
+        #end def
+
+
     ]]></token>
 </macros>
