@@ -33,4 +33,12 @@
 
 
     ]]></token>
+    <xml name="vcfTypes" >
+        <option value="auto">Auto</option>
+        <option value="gangstr">GangSTR</option>
+        <option value="advntr">Advntr</option>
+        <option value="hipstr">HipSTR</option>
+        <option value="eh">Expansion hunter</option>
+        <option value="popstr">PopSTR</option>
+    </xml>
 </macros>
