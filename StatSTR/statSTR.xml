@@ -1,0 +1,212 @@
+<tool id="statSTR" name="StatSTR - TRTools" version="@TRTOOLS_VERSION@" python_template_version="3.5">
+    <description>StatSTR takes in a TR genotyping VCF file and outputs per-locus statistics.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <expand macro="requirements"/>
+    <command detect_errors="aggressive"><![CDATA[
+        statSTR
+            
+    ## Auto-generated command section
+    ## TODO: please review and edit this section as needed
+    
+    ## Inputs
+    
+        --vcf '$main_params.vcf'
+        --out '$main_params.out'
+        --vcftype $main_params.vcftype
+        
+    #if $opt_basic.samples:
+        --samples '$opt_basic.samples'
+    #end if
+
+    #if $opt_basic.region:
+        --region '$opt_basic.region'
+    #end if
+
+    #if $opt_basic.sample_prefixes:
+        --sample-prefixes '$opt_basic.sample_prefixes'
+    #end if
+    
+    #if str($opt_basic.precision):
+        --precision $opt_basic.precision
+    #end if
+
+    #if $statistic_opt.thresh:
+        --thresh
+    #end if
+    #if $statistic_opt.afreq:
+        --afreq
+    #end if
+    #if $statistic_opt.acount:
+        --acount
+    #end if
+    #if $statistic_opt.hwep:
+        --hwep
+    #end if
+    #if $statistic_opt.het:
+        --het
+    #end if
+    #if $statistic_opt.entropy:
+        --entropy
+    #end if
+    #if $statistic_opt.mean:
+        --mean
+    #end if
+    #if $statistic_opt.mode:
+        --mode
+    #end if
+    #if $statistic_opt.var:
+        --var
+    #end if
+    #if $statistic_opt.numcalled:
+        --numcalled
+    #end if
+
+
+    1> $stdout 2> $stderr
+
+    ]]></command>
+    <inputs>
+        <section name="main_params" title="Most important parameters" expanded="true">
+            <param argument="--vcf" name="vcf" type="data" format="vcf.gz" label="VCF file" help="VCF file to analyze"/>
+            <param argument="--out" name="out" type="text" label="Output name prefix"
+                   help="Output prefix for files generated"/>
+             <param argument="--vcftype" name="vcftype" type="select" label="Variant caller type of input VCF" help="
+                        Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
+                <option value="auto">Auto</option>
+                <option value="gangstr">GangSTR</option>
+                <option value="advntr">Advntr</option>
+                <option value="hipstr">HipSTR</option>
+                <option value="eh">Expansion hunter</option>
+                <option value="popstr">PopSTR</option>
+            </param>
+        </section>
+        <section name="opt_basic" title="Basic optional arguments" expanded="false">
+
+            <param argument="--samples" type="data" format="txt" optional="true" label="List of samples to include"
+                   help="File containing list of samples to include.
+                     If not specified, all samples are used. Samples in the list that are not included in the input vcf or
+                     are misspelled are silently ignored"/>
+            <param argument="--region" type="text" optional="true" label="Restrict to specific regions (chrom:start-end)"
+                   help="The prefixes to name output for each samples group. By default uses 1, 2, 3 etc. Must be sample length as --samples"/>
+
+            <param argument="--sample-prefixes" type="text" optional="true" label="The prefixes to name output for each samples group"
+                help="Restrict to specific regions (chrom:start-end). Requires the input VCF to be bgzipped and tabix indexed."/>
+            <param argument="--precision" type="integer" optional="true" label="How much precision to use when writing stats (default = 3)" />
+
+        </section>
+        <section name="statistic_opt" title="Plot related optional arguments" expanded="false">
+            <param argument="--thresh" type="boolean" optional="true" label="Output the maximum observed allele length." />
+            <param argument="--afreq" type="boolean" optional="true" label="Output allele frequences." help="Output allele frequences. Comma-separated list of allele:freq. Only called alleles are included in the list. If there are no called alleles, ‘.’ is emitted." />
+            <param argument="--acount" type="boolean" optional="true" label="Output allele counts." help="Output allele counts. Comma-separated list of allele:count Only called alleles are included in the list. If there are no called alleles, ‘.’ is emitted." />
+            <param argument="--hwep" type="boolean" optional="true" label="Output Hardy Weinberg p-values per locus." />
+            <param argument="--het" type="boolean" optional="true" label="Output heterozygosity of each locus." />
+            <param argument="--entropy" type="boolean" optional="true" label="Output the bit-entropy of the distribution of alleles at each locus." help="Entropy is a measurement of how hard it is to predict genotypes at a locus, where higher entropy values indicate more complex loci. See wikipedia for the mathematical definition of entropy." />
+            <param argument="--mean" type="boolean" optional="true" label="Output mean allele length." />
+            <param argument="--mode" type="boolean" optional="true" label="Output mode allele length." />
+            <param argument="--var" type="boolean" optional="true" label="Output variance of allele length.." />
+            <param argument="--numcalled" type="boolean" optional="true" label="Output number of called samples." />
+        </section>
+
+    </inputs>
+    <outputs>
+        <data name="stdout" label="Outputs and console output" format="txt">
+            <discover_datasets format="tabular" pattern="(?P&lt;designation&gt;.+)\.tab" visible="true"/>
+        </data>
+        <data name="stderr" label="stderr output" format="txt" />
+    
+
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+            <param name="out" value="test"/>
+            <param name="vcftype" value="hipstr"/>
+            <output name="stdout" file="output.txt" />
+            <output_collection name="qcSTROutput" type="list" count="3">
+                <element name="test-diffref-bias"  ftype="pdf">
+                    <assert_contents>
+                        <has_size value="12600" delta="300" />
+                        <has_text text="%PDF" />
+                        <has_text text="%%EOF" />
+                    </assert_contents>
+                </element>
+                <element name="test-diffref-histogram"  ftype="pdf">
+                    <assert_contents>
+                        <has_size value="11400" delta="300" />
+                        <has_text text="%PDF" />
+                        <has_text text="%%EOF" />
+                    </assert_contents>
+                </element>
+                <element name="test-quality"  ftype="pdf">
+                    <assert_contents>
+                        <has_size value="11900" delta="300" />
+                        <has_text text="%PDF" />
+                        <has_text text="%%EOF" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+
+    </tests>
+
+    <help>
+        usage: 
+Tool for computing stats on a TR VCF file
+ [-h] --vcf VCF --out OUT [--vcftype VCFTYPE] [--precision PRECISION] [--samples SAMPLES] [--sample-prefixes SAMPLE_PREFIXES] [--region REGION] [--thresh] [--afreq]
+                                                   [--acount] [--hwep] [--het] [--entropy] [--mean] [--mode] [--var] [--numcalled] [--use-length] [--plot-afreq] [--version]
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Input/output:
+  --vcf VCF             Input STR VCF file
+  --out OUT             Output file prefix. Use stdout to print file to standard output. In addition, if not stdout then timing diagnostics are print to stdout.
+  --vcftype VCFTYPE     Options=['gangstr', 'advntr', 'hipstr', 'eh', 'popstr'] (default: auto)
+  --precision PRECISION
+                        How much precision to use when printing decimals (default: 3)
+
+Filtering group:
+  --samples SAMPLES     File containing list of samples to include. Or a comma-separated list of files to compute stats separate for each group of samples
+  --sample-prefixes SAMPLE_PREFIXES
+                        Prefixes to name output for each samples group. By default uses 1,2,3 etc.
+  --region REGION       Restrict to the region chrom:start-end. Requires file to bgzipped and tabix indexed.
+
+Stats group:
+  --thresh              Output threshold field (max allele size, used for GangSTR strinfo). (default: False)
+  --afreq               Output allele frequencies (default: False)
+  --acount              Output allele counts (default: False)
+  --hwep                Output HWE p-values per loci. (default: False)
+  --het                 Output the heterozygosity of each locus. (default: False)
+  --entropy             Output the entropy of each locus. (default: False)
+  --mean                Output mean of the allele frequencies. (default: False)
+  --mode                Output mode of the allele frequencies. (default: False)
+  --var                 Output variance of the allele frequencies. (default: False)
+  --numcalled           Output number of samples called. (default: False)
+  --use-length          Calculate per-locus stats (het, HWE) collapsing alleles by length. This is implicitly true for genotypers which only emit length based genotypes. (default: False)
+
+Plotting group:
+  --plot-afreq          Output allele frequency plot. Will only do for a maximum of 10 TRs. (default: False)
+
+Version:
+  --version             show program's version number and exit
+
+    </help>
+
+
+    <citations>
+        <citation type="bibtex">
+            @misc{TRTools: a toolkit for genome-wide analysis of tandem repeats,
+            author = {Nima Mousavi, Jonathan Margoliash, Neha Pusarla, Shubham Saini, Richard Yanicky, Melissa Gymrek},
+            year = {2020},
+            title = {TRTools},
+            publisher = {GitHub},
+            journal = {GitHub repository},
+            url = {https://github.com/gymreklab/trtools},
+            }
+        </citation>
+    </citations>
+</tool>
