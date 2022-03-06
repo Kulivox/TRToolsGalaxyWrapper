@@ -121,36 +121,40 @@
     </outputs>
 
     <tests>
-        <test>
-            <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
-            <param name="out" value="test"/>
-            <param name="vcftype" value="hipstr"/>
-            <output name="stdout" file="output.txt" />
-            <output_collection name="qcSTROutput" type="list" count="3">
-                <element name="test-diffref-bias"  ftype="pdf">
-                    <assert_contents>
-                        <has_size value="12600" delta="300" />
-                        <has_text text="%PDF" />
-                        <has_text text="%%EOF" />
-                    </assert_contents>
-                </element>
-                <element name="test-diffref-histogram"  ftype="pdf">
-                    <assert_contents>
-                        <has_size value="11400" delta="300" />
-                        <has_text text="%PDF" />
-                        <has_text text="%%EOF" />
-                    </assert_contents>
-                </element>
-                <element name="test-quality"  ftype="pdf">
-                    <assert_contents>
-                        <has_size value="11900" delta="300" />
-                        <has_text text="%PDF" />
-                        <has_text text="%%EOF" />
-                    </assert_contents>
-                </element>
-            </output_collection>
-        </test>
 
+
+    <test>
+        <section name="main_params">
+            <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+            <param name="out" value="test_result"/>
+            <param name="vcftype" value="hipstr"/>
+        </section>
+        <section name="opt_basic">
+            <param name="precision" value="5"/>
+        </section>
+        <section name="statistic_opt">
+            <param name="thresh" value="true"/>
+            <param name="afreq" value="true"/>
+            <param name="acount" value="true"/>
+            <param name="hwep" value="true"/>
+            <param name="het" value="true"/>
+            <param name="entropy" value="true"/>
+            <param name="mean" value="true"/>
+            <param name="mode" value="true"/>
+            <param name="var" value="true"/>
+            <param name="numcalled" value="true"/>
+        </section>
+
+        <output name="stdout">
+            <assert_contents>
+               <has_text text="Finished 9550 records" />
+            </assert_contents>
+            <discovered_dataset designation="test_result" ftype="tabular" file="test_result.tab" />
+        </output>
+
+        <output name="stderr" file="stderr.txt" />
+           
+    </test>
     </tests>
 
     <help>
