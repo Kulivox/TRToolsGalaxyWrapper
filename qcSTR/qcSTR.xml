@@ -106,7 +106,6 @@
         <collection format="pdf" name="qcSTROutput" type="list" label="Output of qcSTR">
             <discover_datasets format="pdf" pattern="(?P&lt;designation&gt;.+)\.pdf"/>
         </collection>
-        <!--        <data format="pdf" name="out_file1"/>-->
 
     </outputs>
 
@@ -144,8 +143,7 @@
     </tests>
 
     <help>
-        usage: 
-        Tool for generating various QC plots for TR callsets
+        usage: Tool for generating various QC plots for TR callsets
         
         Required arguments:
           --vcf VCF             VCF file to analyze.
@@ -155,7 +153,9 @@
           --vcftype {gangstr,advntr,hipstr,eh,popstr,auto}
                                 Which type of VCF to restrict the input to, or 'auto'
                                 for no restrction (default: auto)
+
           --samples SAMPLES     File containing list of samples to include
+
           --period PERIOD       Only consider repeats with this motif length
                   
         Quality plot options:
@@ -163,27 +163,32 @@
                                 Which quality plot(s) to produce. May be specified
                                 more than once. See the README for more info (default:
                                 [])
+
           --quality-ignore-no-call
                                 Exclude no-calls and calls without quality scores from
                                 quality graph distributions instead of the default,
                                 which is to include them as zero quality calls.
                                 Setting this can cause the plotting to crash if it
-                                reduces the number of valid calls (in a strata) to <=
+                                reduces the number of valid calls (in a strata) to &lt;=
                                 1 (default: False)
         
         Reference bias plot options:
           --refbias-metric {mean,median}
                                 Which metric to use for the y-axis on the reference
                                 bias plot. (default: mean)
+
           --refbias-mingts REFBIAS_MINGTS
                                 Don't compute points for the reference bias plot based
                                 on fewer than this many genotypes (default: 100)
+
           --refbias-xrange-min REFBIAS_XRANGE_MIN
                                 Minimum x-axis value (bp) to show on the reference
                                 bias plot (default: 0)
+
           --refbias-xrange-max REFBIAS_XRANGE_MAX
                                 Maximum x-axis value (bp) to show on the reference
                                 bias plot (default: 100)
+
           --refbias-binsize REFBIAS_BINSIZE
                                 Size (bp) of x-axis bins for the reference bias plot
                                 (default: 5)
@@ -194,7 +199,6 @@
         
         Version:
           --version             show program's version number and exit
-        
     </help>
 
 
