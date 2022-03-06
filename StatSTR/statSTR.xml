@@ -159,45 +159,59 @@
 
     <help>
         usage: 
-Tool for computing stats on a TR VCF file
- [-h] --vcf VCF --out OUT [--vcftype VCFTYPE] [--precision PRECISION] [--samples SAMPLES] [--sample-prefixes SAMPLE_PREFIXES] [--region REGION] [--thresh] [--afreq]
-                                                   [--acount] [--hwep] [--het] [--entropy] [--mean] [--mode] [--var] [--numcalled] [--use-length] [--plot-afreq] [--version]
-
-optional arguments:
-  -h, --help            show this help message and exit
-
-Input/output:
-  --vcf VCF             Input STR VCF file
-  --out OUT             Output file prefix. Use stdout to print file to standard output. In addition, if not stdout then timing diagnostics are print to stdout.
-  --vcftype VCFTYPE     Options=['gangstr', 'advntr', 'hipstr', 'eh', 'popstr'] (default: auto)
-  --precision PRECISION
-                        How much precision to use when printing decimals (default: 3)
-
-Filtering group:
-  --samples SAMPLES     File containing list of samples to include. Or a comma-separated list of files to compute stats separate for each group of samples
-  --sample-prefixes SAMPLE_PREFIXES
-                        Prefixes to name output for each samples group. By default uses 1,2,3 etc.
-  --region REGION       Restrict to the region chrom:start-end. Requires file to bgzipped and tabix indexed.
-
-Stats group:
-  --thresh              Output threshold field (max allele size, used for GangSTR strinfo). (default: False)
-  --afreq               Output allele frequencies (default: False)
-  --acount              Output allele counts (default: False)
-  --hwep                Output HWE p-values per loci. (default: False)
-  --het                 Output the heterozygosity of each locus. (default: False)
-  --entropy             Output the entropy of each locus. (default: False)
-  --mean                Output mean of the allele frequencies. (default: False)
-  --mode                Output mode of the allele frequencies. (default: False)
-  --var                 Output variance of the allele frequencies. (default: False)
-  --numcalled           Output number of samples called. (default: False)
-  --use-length          Calculate per-locus stats (het, HWE) collapsing alleles by length. This is implicitly true for genotypers which only emit length based genotypes. (default: False)
-
-Plotting group:
-  --plot-afreq          Output allele frequency plot. Will only do for a maximum of 10 TRs. (default: False)
-
-Version:
-  --version             show program's version number and exit
-
+        Tool for computing stats on a TR VCF file
+        
+        optional arguments:
+          -h, --help            show this help message and exit
+        
+        Input/output:
+          --vcf VCF             Input STR VCF file
+          --out OUT             Output file prefix. Use stdout to print file to
+                                standard output. In addition, if not stdout then
+                                timing diagnostics are print to stdout.
+          --vcftype VCFTYPE     Options=['gangstr', 'advntr', 'hipstr', 'eh',
+                                'popstr'] (default: auto)
+          --precision PRECISION
+                                How much precision to use when printing decimals
+                                (default: 3)
+        
+        Filtering group:
+          --samples SAMPLES     File containing list of samples to include. Or a
+                                comma-separated list of files to compute stats
+                                separate for each group of samples
+          --sample-prefixes SAMPLE_PREFIXES
+                                Prefixes to name output for each samples group. By
+                                default uses 1,2,3 etc.
+          --region REGION       Restrict to the region chrom:start-end. Requires file
+                                to bgzipped and tabix indexed.
+        
+        Stats group:
+          --thresh              Output threshold field (max allele size, used for
+                                GangSTR strinfo). (default: False)
+          --afreq               Output allele frequencies (default: False)
+          --acount              Output allele counts (default: False)
+          --hwep                Output HWE p-values per loci. (default: False)
+          --het                 Output the heterozygosity of each locus. (default:
+                                False)
+          --entropy             Output the entropy of each locus. (default: False)
+          --mean                Output mean of the allele frequencies. (default:
+                                False)
+          --mode                Output mode of the allele frequencies. (default:
+                                False)
+          --var                 Output variance of the allele frequencies. (default:
+                                False)
+          --numcalled           Output number of samples called. (default: False)
+          --use-length          Calculate per-locus stats (het, HWE) collapsing
+                                alleles by length. This is implicitly true for
+                                genotypers which only emit length based genotypes.
+                                (default: False)
+        
+        Plotting group:
+          --plot-afreq          Output allele frequency plot. Will only do for a
+                                maximum of 10 TRs. (default: False)
+        
+        Version:
+          --version             show program's version number and exit
     </help>
 
 
