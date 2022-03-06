@@ -29,6 +29,36 @@ jobs:
       - name: lint statSTR
         run: planemo lint StatSTR/statSTR.xml
 
+      - name: lint mergeSTR
+        run: planemo lint MergeSTR/mergeSTR.xml
+    
+  test-tool-definition-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install planemo
+        run: pip install planemo
+      
+      - name: install galaxy
+        run: git clone -b release_22.01 https://github.com/galaxyproject/galaxy.git
+      
+      - name: test compareSTR
+        run: planemo test --galaxy_root=galaxy CompareSTR/compareSTR.xml
+
+      - name: test dumpSTR
+        run: planemo test --galaxy_root=galaxy DumpSTR/dumpSTR.xml
+      
+      - name: test qcSTR
+        run: planemo test --galaxy_root=galaxy qcSTR/qcSTR.xml
+      
+      - name: test statSTR
+        run: planemo test --galaxy_root=galaxy StatSTR/statSTR.xml
+      
+      - name: test mergeSTR
+        run: planemo test --galaxy_root=galaxy MergeSTR/mergeSTR.xml
+
+
 
 
       
