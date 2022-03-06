@@ -109,6 +109,56 @@
             <discover_datasets  pattern="(?P&lt;designation&gt;.+)\.tab"/>
         </collection>
     </outputs>
+    <tests>
+    <test>
+        <section name="required">
+            <param name="vcf1" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+            <param name="vcf2" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+            <param name="out" value="test_result"/>
+        </section>
+        
+        <section name="stratification">
+            <param name="stratify_fields" value="DP,Q"/>
+            <param name="stratify_binsizes" value="0:50:5,0:1:0.1"/>
+            <param name="stratify_file" value="0"/>
+        </section>
+        <section name="other">
+            <param name="verbose" value="true"/>
+            <param name="vcftype1" value="hipstr"/>
+            <param name="vcftype2" value="hipstr"/>
+        </section>
+
+        <output name="stdout" file="stdout.txt" />
+        <output name="stderr" file="stderr.txt" />
+            
+        <output_collection name="pdfOutput" type="list">
+            <element name="test_result-bubble-periodALL">
+                <assert_contents>
+                    <has_size value="24771" delta="200"/>
+                </assert_contents>
+            </element>
+            <element name="test_result-locuscompare">
+                <assert_contents>
+                    <has_size value="12800" delta="200"/>
+                </assert_contents>
+            </element>
+            <element name="test_result-samplecompare">
+                <assert_contents>
+                    <has_size value="9247" delta="200"/>
+                </assert_contents>
+            </element>
+            
+        </output_collection>
+        <output_collection name="tabularOutput" type="list">
+            <element name="test_result-overall" file="test_result-overall.tab" />
+            <element name="test_result-locuscompare" file="test_result-locuscompare.tab" />
+            <element name="test_result-samplecompare" file="test_result-samplecompare.tab" />
+        </output_collection>
+    </test>
+    
+    </tests>
+
+    
 
     <help><![CDATA[
         Tool for comparing genotypes from two TR VCFs
