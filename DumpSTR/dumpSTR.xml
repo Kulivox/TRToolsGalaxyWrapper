@@ -11,6 +11,12 @@
     <command detect_errors="aggressive"><![CDATA[
 
     ## Inputs
+    
+    ## Auto-generated command section
+    ## TODO: please review and edit this section as needed
+    
+    ## Inputs
+    
     dumpSTR
     --vcf '$main_params.vcf'
     --out '$main_params.out'
@@ -47,6 +53,67 @@
     #if $filter_opt.drop_filtered:
         --drop-filtered
     #end if
+    
+    
+    #if str($filter_call_level.advntr_filters.advntr_min_call_DP):
+        --advntr-min-call-DP $filter_call_level.advntr_filters.advntr_min_call_DP#end if
+    #if str($filter_call_level.advntr_filters.advntr_max_call_DP):
+        --advntr-max-call-DP $filter_call_level.advntr_filters.advntr_max_call_DP#end if
+    #if str($filter_call_level.advntr_filters.advntr_min_spanning):
+        --advntr-min-spanning $filter_call_level.advntr_filters.advntr_min_spanning#end if
+    #if str($filter_call_level.advntr_filters.advntr_min_flanking):
+        --advntr-min-flanking $filter_call_level.advntr_filters.advntr_min_flanking#end if
+    #if str($filter_call_level.advntr_filters.advntr_min_ML):
+        --advntr-min-ML $filter_call_level.advntr_filters.advntr_min_ML#end if
+    #if str($filter_call_level.eh_filters.eh_min_call_LC):
+        --eh-min-call-LC $filter_call_level.eh_filters.eh_min_call_LC#end if
+    #if str($filter_call_level.eh_filters.eh_max_call_LC):
+        --eh-max-call-LC $filter_call_level.eh_filters.eh_max_call_LC#end if
+    #if str($filter_call_level.gangstr_filters.gangstr_min_call_DP):
+        --gangstr-min-call-DP $filter_call_level.gangstr_filters.gangstr_min_call_DP#end if
+    #if str($filter_call_level.gangstr_filters.gangstr_max_call_DP):
+        --gangstr-max-call-DP $filter_call_level.gangstr_filters.gangstr_max_call_DP#end if
+    #if str($filter_call_level.gangstr_filters.gangstr_min_call_Q):
+        --gangstr-min-call-Q $filter_call_level.gangstr_filters.gangstr_min_call_Q#end if
+    #if str($filter_call_level.gangstr_filters.gangstr_expansion_prob_het):
+        --gangstr-expansion-prob-het $filter_call_level.gangstr_filters.gangstr_expansion_prob_het#end if
+    #if str($filter_call_level.gangstr_filters.gangstr_expansion_prob_hom):
+        --gangstr-expansion-prob-hom $filter_call_level.gangstr_filters.gangstr_expansion_prob_hom#end if
+    #if str($filter_call_level.gangstr_filters.gangstr_expansion_prob_total):
+        --gangstr-expansion-prob-total $filter_call_level.gangstr_filters.gangstr_expansion_prob_total#end if
+
+    #if $filter_call_level.gangstr_filters.gangstr_filter_span_only:
+        --gangstr-filter-span-only
+    #end if
+
+    #if $filter_call_level.gangstr_filters.gangstr_filter_spanbound_only:
+        --gangstr-filter-spanbound-only
+    #end if
+
+    #if $filter_call_level.gangstr_filters.gangstr_filter_badCI:
+        --gangstr-filter-badCI
+    #end if
+   
+    
+    
+    #if str($filter_call_level.hipstr_filters.hipstr_max_call_flank_indel):
+        --hipstr-max-call-flank-indel $filter_call_level.hipstr_filters.hipstr_max_call_flank_indel#end if
+    #if str($filter_call_level.hipstr_filters.hipstr_max_call_stutter):
+        --hipstr-max-call-stutter $filter_call_level.hipstr_filters.hipstr_max_call_stutter#end if
+    #if str($filter_call_level.hipstr_filters.hipstr_min_supp_reads):
+        --hipstr-min-supp-reads $filter_call_level.hipstr_filters.hipstr_min_supp_reads#end if
+    #if str($filter_call_level.hipstr_filters.hipstr_min_call_DP):
+        --hipstr-min-call-DP $filter_call_level.hipstr_filters.hipstr_min_call_DP#end if
+    #if str($filter_call_level.hipstr_filters.hipstr_max_call_DP):
+        --hipstr-max-call-DP $filter_call_level.hipstr_filters.hipstr_max_call_DP#end if
+    #if str($filter_call_level.hipstr_filters.hipstr_min_call_Q):
+        --hipstr-min-call-Q $filter_call_level.hipstr_filters.hipstr_min_call_Q#end if
+    #if str($filter_call_level.popstr_filters.popstr_min_call_DP):
+        --popstr-min-call-DP $filter_call_level.popstr_filters.popstr_min_call_DP#end if
+    #if str($filter_call_level.popstr_filters.popstr_max_call_DP):
+        --popstr-max-call-DP $filter_call_level.popstr_filters.popstr_max_call_DP#end if
+    #if str($filter_call_level.popstr_filters.popstr_require_support):
+        --popstr-require-support $filter_call_level.popstr_filters.popstr_require_support#end if
     
     ## Outputs
     1> $stdout 2> $stderr
@@ -87,9 +154,42 @@
            <param argument="--drop-filtered" type="boolean" optional="true" label="Do not output loci that were filtered" help="boolean" />
 
         </section>
-
         <section name="filter_call_level" title="Call-level filters" expanded="false">
-            <!-- TODO Call level filters -->
+            <section name="advntr_filters" title="AdVNTR call-level filters" expanded="false">
+                <param argument="--advntr-min-call-DP" type="integer" optional="true" label="Minimum call coverage. Based on DP field." />
+                <param argument="--advntr-max-call-DP" type="integer" optional="true" label="Maximum call coverage. Based on DP field." />
+                <param argument="--advntr-min-spanning" type="integer" optional="true" label="Minimum spanning read count (SR field)" />
+                <param argument="--advntr-min-flanking" type="integer" optional="true" label="Minimum flanking read count (FR field)" />
+                <param argument="--advntr-min-ML" type="float" optional="true" label="Minimum value of maximum likelihood (ML field)" />
+            </section>
+            <section name="eh_filters" title="ExpansionHunter call-level filters" expanded="false">
+                <param argument="--eh-min-call-LC" type="integer" optional="true" label="Minimum call coverage. Based on LC field." />
+                <param argument="--eh-max-call-LC" type="integer" optional="true" label="Maximum call coverage. Based on LC field." />
+            </section>
+            <section name="gangstr_filters" title="GangSTR call-level filters" expanded="false">
+                <param argument="--gangstr-min-call-DP" type="integer" optional="true" label="Minimum call coverage. Based on DP field." />
+                <param argument="--gangstr-max-call-DP" type="integer" optional="true" label="Maximum call coverage. Based on DP field." />
+                <param argument="--gangstr-min-call-Q" type="float" optional="true" label="Minimum call quality score. Based on Q field." />
+                <param argument="--gangstr-expansion-prob-het" type="float" optional="true" label="Expansion prob-value threshold (HET)." help="Filters calls with probability of heterozygous expansion less than this. Based on QEXP field." />
+                <param argument="--gangstr-expansion-prob-hom" type="float" optional="true" label="Expansion prob-value threshold (HOM)." help="Filters calls with probability of homozygous expansion less than this. Based on QEXP field." />
+                <param argument="--gangstr-expansion-prob-total" type="float" optional="true" label="Expansion prob-value threshold.(TOTAL)" help="Filters calls with probability of homozygous or heterozygous expansion less than this. Based on QEXP field." />
+                <param argument="--gangstr-filter-span-only" type="boolean" optional="true" label="Filter out all calls that only have spanning read support. Based on RC field." />
+                <param argument="--gangstr-filter-spanbound-only" type="boolean" optional="true" label="Filter out all reads except spanning and bounding. Based on RC field." />
+                <param argument="--gangstr-filter-badCI" type="boolean" optional="true" label="Filter regions where the ML estimate is not in the CI. Based on REPCN and REPCI fields." />
+            </section>
+            <section name="hipstr_filters" title="HipSTR call-level filters" expanded="false">
+                <param argument="--hipstr-max-call-flank-indel" type="float" optional="true" label="Maximum call flank indel rate. Computed as DFLANKINDEL/DP" />
+                <param argument="--hipstr-max-call-stutter" type="float" optional="true" label="Maximum call stutter rate." help="PCR stutter artifacts add or remove copies of an STR's motif to sequencing reads, resulting in observed STR sizes that differ from the size of the underlying genotype. Computed as DSTUTTER/DP" />
+                <param argument="--hipstr-min-supp-reads" type="integer" optional="true" label="Minimum supporting reads for each allele. Based on ALLREADS and GB fields" />
+                <param argument="--hipstr-min-call-DP" type="integer" optional="true" label="Minimum call coverage. Based on DP field." />
+                <param argument="--hipstr-max-call-DP" type="integer" optional="true" label="Maximum call coverage. Based on DP field." />
+                <param argument="--hipstr-min-call-Q" type="float" optional="true" label="Minimum call quality score. Based on Q field." />
+            </section>
+            <section name="popstr_filters" title="PopSTR call-level filters" expanded="false">
+                <param argument="--popstr-min-call-DP" type="integer" optional="true" label="Minimum call coverage. Based on DP field." />
+                <param argument="--popstr-max-call-DP" type="integer" optional="true" label="Maximum call coverage. Based on DP field." />
+                <param argument="--popstr-require-support" type="integer" optional="true" label="Require each allele call to have at least n supporting reads. Based on AD field." />
+            </section>
         </section>
     </inputs>
 
@@ -107,9 +207,47 @@
         </data>
 
     </outputs>
+    <tests>
+    <test>
+        <section name="main_params">
+            <param name="vcf" value="NA12891_chr21_hipstr.sorted.vcf.gz"/>
+            <param name="out" value="test_result"/>
+            <param name="vcftype" value="hipstr"/>
+            <param name="zip" value="false"/>
+        </section>
+        <section name="filter_opt">
+            <param name="min_locus_callrate" value="0.1"/>
+            <param name="use_length" value="true"/>
+            <param name="drop_filtered" value="true"/>
+        </section>
+        <section name="filter_call_level">
+            <section name="hipstr_filters">
+                <param name="hipstr_max_call_flank_indel" value="0.2"/>
+                <param name="hipstr_min_call_Q" value="0.4"/>
+            </section>
+        </section>
 
-    <help><![CDATA[
-    Tool for filtering and QC of TR genotypes
+        <output name="stdout" file="stdout.txt"/>
+    
+        <output name="main_output">
+            <discovered_dataset designation="test_result.loclog" file="test_result.loclog.tab" />
+            <discovered_dataset designation="test_result.samplog" file="test_result.samplog.tab" />
+            <discovered_dataset designation="test_result">
+                <assert_contents>
+                    <has_size value="4061730" delta="200" />
+                    <has_text text="##fileformat=VCFv4.1" />
+                    <has_n_lines n="9046" />
+                </assert_contents>
+            </discovered_dataset>
+        </output>
+        <output name="stderr" file="stderr.txt" />
+           
+    </test>
+    
+    </tests>
+
+    <help>
+        <![CDATA[Tool for filtering and QC of TR genotypes
 
     Input/output:
     --vcf VCF             Input STR VCF file
@@ -209,8 +347,7 @@
     --verbose             Print out extra info (default: False)
 
     Version:
-    --version             show program's version number and exit
-        ]]>
+    --version             show program's version number and exit]]>
     </help>
 
 <citations>
