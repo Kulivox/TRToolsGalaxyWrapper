@@ -72,14 +72,34 @@
     </outputs>
 
     <tests>
-        <test>
-            <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
-            <param name="out" value="test"/>
+        
+    <test>
+        <section name="main_params">
+            <param name="out" value="test_result"/>
             <param name="vcftype" value="hipstr"/>
-            <output name="stdout" file="output.txt" />
-
-        </test>
-
+            <repeat name="vcfs">
+                <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+            </repeat>
+            <repeat name="vcfs">
+                <param name="vcf" value="NA12891_chr21_hipstr.sorted.vcf.gz"/>
+            </repeat>
+        </section>
+        <section name="other">
+            <param name="verbose" value="true"/>
+        </section>
+        <output name="stdout" file="stdout.txt">
+            <discovered_dataset designation="test_result">
+                <!-- The vcf output itself can't be directly compared, because it contains the command that executed it, and that command is different for every run -->
+                <assert_contents>
+                    <has_size value="3106028" delta="100" />
+                    <has_text text="##fileformat=VCFv4.1" />
+                    <has_n_lines n="9695" />
+                </assert_contents>
+            </discovered_dataset>
+        </output>
+        <output name="stderr" file="stderr.txt" />
+        
+    </test>
     </tests>
 
     <help>
