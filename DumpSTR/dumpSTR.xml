@@ -247,107 +247,127 @@
     </tests>
 
     <help>
-        <![CDATA[Tool for filtering and QC of TR genotypes
-
-    Input/output:
-    --vcf VCF             Input STR VCF file
-    --out OUT             Prefix for output files
-    --zip                 Produce a bgzipped and tabix indexed output VCF (default: False)
-    --vcftype VCFTYPE     Options=['gangstr', 'advntr', 'hipstr', 'eh', 'popstr'] (default: auto)
-
-    Locus-level filters (tool agnostic):
-    --min-locus-callrate MIN_LOCUS_CALLRATE
-                            Minimum locus call rate
-    --min-locus-hwep MIN_LOCUS_HWEP
-                            Filter loci failing HWE at this p-value threshold
-    --min-locus-het MIN_LOCUS_HET
-                            Minimum locus heterozygosity
-    --max-locus-het MAX_LOCUS_HET
-                            Maximum locus heterozygosity
-    --use-length          Calculate per-locus stats (het, HWE) collapsing alleles by length (default: False)
-    --filter-regions FILTER_REGIONS
-                            Comma-separated list of BED files of regions to filter. Must be bgzipped and tabix indexed
-    --filter-regions-names FILTER_REGIONS_NAMES
-                            Comma-separated list of filter names for each BED filter file
-    --filter-hrun         Filter STRs with long homopolymer runs. (default: False)
-    --drop-filtered       Drop filtered records from output (default: False)
-
-    Call-level filters specific to HipSTR output:
-    --hipstr-max-call-flank-indel HIPSTR_MAX_CALL_FLANK_INDEL
-                            Maximum call flank indel rate
-    --hipstr-max-call-stutter HIPSTR_MAX_CALL_STUTTER
-                            Maximum call stutter rate
-    --hipstr-min-supp-reads HIPSTR_MIN_SUPP_READS
-                            Minimum supporting reads for each allele
-    --hipstr-min-call-DP HIPSTR_MIN_CALL_DP
-                            Minimum call coverage
-    --hipstr-max-call-DP HIPSTR_MAX_CALL_DP
-                            Maximum call coverage
-    --hipstr-min-call-Q HIPSTR_MIN_CALL_Q
-                            Minimum call quality score
-
-    Call-level filters specific to GangSTR output:
-    --gangstr-min-call-DP GANGSTR_MIN_CALL_DP
-                            Minimum call coverage
-    --gangstr-max-call-DP GANGSTR_MAX_CALL_DP
-                            Maximum call coverage
-    --gangstr-min-call-Q GANGSTR_MIN_CALL_Q
-                            Minimum call quality score
-    --gangstr-expansion-prob-het GANGSTR_EXPANSION_PROB_HET
-                            Expansion prob-value threshold. Filters calls with probability of heterozygous expansion less than this
-    --gangstr-expansion-prob-hom GANGSTR_EXPANSION_PROB_HOM
-                            Expansion prob-value threshold. Filters calls with probability of homozygous expansion less than this
-    --gangstr-expansion-prob-total GANGSTR_EXPANSION_PROB_TOTAL
-                            Expansion prob-value threshold. Filters calls with probability of total expansion less than this
-    --gangstr-filter-span-only
-                            Filter out all calls that only have spanning read support (default: False)
-    --gangstr-filter-spanbound-only
-                            Filter out all reads except spanning and bounding (default: False)
-    --gangstr-filter-badCI
-                            Filter regions where the ML estimate is not in the CI (default: False)
-    --gangstr-readlen GANGSTR_READLEN
-                            Read length used (bp). Required if using --require-support
-
-    Call-level filters specific to adVNTR output:
-    --advntr-min-call-DP ADVNTR_MIN_CALL_DP
-                            Minimum call coverage
-    --advntr-max-call-DP ADVNTR_MAX_CALL_DP
-                            Maximum call coverage
-    --advntr-min-spanning ADVNTR_MIN_SPANNING
-                            Minimum spanning read count (SR field)
-    --advntr-min-flanking ADVNTR_MIN_FLANKING
-                            Minimum flanking read count (FR field)
-    --advntr-min-ML ADVNTR_MIN_ML
-                            Minimum value of maximum likelihood (ML field)
-
-    Call-level filters specific to ExpansionHunter output:
-    --eh-min-ADFL EH_MIN_ADFL
-                            Minimum number of flanking reads consistent with the allele
-    --eh-min-ADIR EH_MIN_ADIR
-                            Minimum number of in-repeat reads consistent with the allele
-    --eh-min-ADSP EH_MIN_ADSP
-                            Minimum number of spanning reads consistent with the allele
-    --eh-min-call-LC EH_MIN_CALL_LC
-                            Minimum call coverage
-    --eh-max-call-LC EH_MAX_CALL_LC
-                            Maximum call coverage
-
-    Call-level filters specific to PopSTR output:
-    --popstr-min-call-DP POPSTR_MIN_CALL_DP
-                            Minimum call coverage
-    --popstr-max-call-DP POPSTR_MAX_CALL_DP
-                            Maximum call coverage
-    --popstr-require-support POPSTR_REQUIRE_SUPPORT
-                            Require each allele call to have at least n supporting reads
-
-    Debugging parameters:
-    --num-records NUM_RECORDS
-                            Only process this many records
-    --die-on-warning      Quit if a record can't be parsed (default: False)
-    --verbose             Print out extra info (default: False)
-
-    Version:
-    --version             show program's version number and exit]]>
+        <![CDATA[usage: 
+        Tool for filtering and QC of TR genotypes
+         
+        Input/output:
+          --vcf VCF             Input STR VCF file
+          --out OUT             Prefix for output files
+          --zip                 Produce a bgzipped and tabix indexed output VCF
+                                (default: False)
+          --vcftype VCFTYPE     Options=['gangstr', 'advntr', 'hipstr', 'eh',
+                                'popstr'] (default: auto)
+        
+        Locus-level filters (tool agnostic):
+          --min-locus-callrate MIN_LOCUS_CALLRATE
+                                Minimum locus call rate
+          --min-locus-hwep MIN_LOCUS_HWEP
+                                Filter loci failing HWE at this p-value threshold
+          --min-locus-het MIN_LOCUS_HET
+                                Minimum locus heterozygosity
+          --max-locus-het MAX_LOCUS_HET
+                                Maximum locus heterozygosity
+          --use-length          Calculate per-locus stats (het, HWE) collapsing
+                                alleles by length (default: False)
+          --filter-regions FILTER_REGIONS
+                                Comma-separated list of BED files of regions to
+                                filter. Must be bgzipped and tabix indexed
+          --filter-regions-names FILTER_REGIONS_NAMES
+                                Comma-separated list of filter names for each BED
+                                filter file
+          --filter-hrun         Filter STRs with long homopolymer runs. (default:
+                                False)
+          --drop-filtered       Drop filtered records from output (default: False)
+        
+        Call-level filters specific to HipSTR output:
+          --hipstr-max-call-flank-indel HIPSTR_MAX_CALL_FLANK_INDEL
+                                Maximum call flank indel rate
+          --hipstr-max-call-stutter HIPSTR_MAX_CALL_STUTTER
+                                Maximum call stutter rate
+          --hipstr-min-supp-reads HIPSTR_MIN_SUPP_READS
+                                Minimum supporting reads for each allele
+          --hipstr-min-call-DP HIPSTR_MIN_CALL_DP
+                                Minimum call coverage
+          --hipstr-max-call-DP HIPSTR_MAX_CALL_DP
+                                Maximum call coverage
+          --hipstr-min-call-Q HIPSTR_MIN_CALL_Q
+                                Minimum call quality score
+        
+        Call-level filters specific to GangSTR output:
+          --gangstr-min-call-DP GANGSTR_MIN_CALL_DP
+                                Minimum call coverage
+          --gangstr-max-call-DP GANGSTR_MAX_CALL_DP
+                                Maximum call coverage
+          --gangstr-min-call-Q GANGSTR_MIN_CALL_Q
+                                Minimum call quality score
+          --gangstr-expansion-prob-het GANGSTR_EXPANSION_PROB_HET
+                                Expansion prob-value threshold. Filters calls with
+                                probability of heterozygous expansion less than this
+          --gangstr-expansion-prob-hom GANGSTR_EXPANSION_PROB_HOM
+                                Expansion prob-value threshold. Filters calls with
+                                probability of homozygous expansion less than this
+          --gangstr-expansion-prob-total GANGSTR_EXPANSION_PROB_TOTAL
+                                Expansion prob-value threshold. Filters calls with
+                                probability of total expansion less than this
+          --gangstr-filter-span-only
+                                Filter out all calls that only have spanning read
+                                support (default: False)
+          --gangstr-filter-spanbound-only
+                                Filter out all reads except spanning and bounding
+                                (default: False)
+          --gangstr-filter-badCI
+                                Filter regions where the ML estimate is not in the CI
+                                (default: False)
+          --gangstr-readlen GANGSTR_READLEN
+                                Read length used (bp). Required if using --require-
+                                support
+        
+        Call-level filters specific to adVNTR output:
+          --advntr-min-call-DP ADVNTR_MIN_CALL_DP
+                                Minimum call coverage
+          --advntr-max-call-DP ADVNTR_MAX_CALL_DP
+                                Maximum call coverage
+          --advntr-min-spanning ADVNTR_MIN_SPANNING
+                                Minimum spanning read count (SR field)
+          --advntr-min-flanking ADVNTR_MIN_FLANKING
+                                Minimum flanking read count (FR field)
+          --advntr-min-ML ADVNTR_MIN_ML
+                                Minimum value of maximum likelihood (ML field)
+        
+        Call-level filters specific to ExpansionHunter output:
+          --eh-min-ADFL EH_MIN_ADFL
+                                Minimum number of flanking reads consistent with the
+                                allele
+          --eh-min-ADIR EH_MIN_ADIR
+                                Minimum number of in-repeat reads consistent with the
+                                allele
+          --eh-min-ADSP EH_MIN_ADSP
+                                Minimum number of spanning reads consistent with the
+                                allele
+          --eh-min-call-LC EH_MIN_CALL_LC
+                                Minimum call coverage
+          --eh-max-call-LC EH_MAX_CALL_LC
+                                Maximum call coverage
+        
+        Call-level filters specific to PopSTR output:
+          --popstr-min-call-DP POPSTR_MIN_CALL_DP
+                                Minimum call coverage
+          --popstr-max-call-DP POPSTR_MAX_CALL_DP
+                                Maximum call coverage
+          --popstr-require-support POPSTR_REQUIRE_SUPPORT
+                                Require each allele call to have at least n supporting
+                                reads
+        
+        Debugging parameters:
+          --num-records NUM_RECORDS
+                                Only process this many records
+          --die-on-warning      Quit if a record can't be parsed (default: False)
+          --verbose             Print out extra info (default: False)
+        
+        Version:
+          --version             show program's version number and exit
+        
+        ]]>
     </help>
 
 <citations>
