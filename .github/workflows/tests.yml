@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Tool definition file validation and tests
 
 # Controls when the workflow will run
 on:
@@ -16,27 +16,26 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  lint-compareSTR:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v3.0.0
+      - name: install planemo
+        run: pip install planemo
+      
+      - name: lint compareSTR
+        run: planemo lint CompareSTR/compareSTR.xml
+
+      - name: lint dumpSTR
+        run: planemo lint DumpSTR/dumpSTR.xml
+      
+      - name: lint qcSTR
+        run: planemo lint qcSTR/qcSTR.xml
+      
+      - name: lint statSTR
+        run: planemo lint StatSTR/statSTR.xml
 
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: |
-          pip install planemo
-          planemo
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      
