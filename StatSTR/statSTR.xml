@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <tool id="statSTR" name="StatSTR" version="@tool_version@">
 
+    <description>StatSTR takes in a TR genotyping VCF file and outputs per-locus statistics.</description>
 
     <macros>
         <import>macros.xml</import>
     </macros>
-    <description>StatSTR takes in a TR genotyping VCF file and outputs per-locus statistics.</description>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[statSTR
 

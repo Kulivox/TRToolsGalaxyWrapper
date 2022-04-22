@@ -1,13 +1,13 @@
 <?xml version="1.0" ?>
 <tool id="mergeSTR" name="MergeSTR" version="@tool_version@">
-
+     <description>MergeSTR merges multiple VCF files produced by the same TR
+        genotyper into a single VCF file.
+    </description>
 
     <macros>
         <import>macros.xml</import>
     </macros>
-    <description>MergeSTR merges multiple VCF files produced by the same TR
-        genotyper into a single VCF file.
-    </description>
+
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
     @INDEX_VCFS@

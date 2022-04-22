@@ -1,13 +1,13 @@
 <?xml version="1.0" ?>
 <tool id="dumpSTR" name="DumpSTR" version="@tool_version@">
-
+    <description>DumpSTR filters VCF files with TR genotypes, performing call-level and locus-level filtering, and
+        outputs a filtered VCF file.
+    </description>
 
     <macros>
         <import>macros.xml</import>
     </macros>
-    <description>DumpSTR filters VCF files with TR genotypes, performing call-level and locus-level filtering, and
-        outputs a filtered VCF file.
-    </description>
+
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[dumpSTR
 ## h definition

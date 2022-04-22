@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
 <tool id="qcSTR" name="QcSTR" version="@tool_version@">
+    <description>qcSTR generates plots that are useful for diagnosing issues in TR calling.</description>
 	<macros>
 		<import>macros.xml</import>
 	</macros>
-	<description>qcSTR generates plots that are useful for diagnosing issues in TR calling.</description>
 	<expand macro="requirements"/>
 	<command detect_errors="exit_code"><![CDATA[qcSTR
 
