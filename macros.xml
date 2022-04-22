@@ -1,5 +1,5 @@
 <macros>
-    <token name="@tool_version@">4.0.2</token>
+    <token name="@tool_version@">4.1.0</token>
     <token name="@INDEX_VCFS@"><![CDATA[##prepare input and indices
 #import os
 
@@ -19,7 +19,7 @@
     #end for
 #end def]]></token>
     <xml name="requirements">
-        <requirement type="package" version="4.0.2">trtools</requirement>
+        <requirement type="package" version="4.1.0">trtools</requirement>
         <requirement type="package" version="1.14">samtools</requirement>
     </xml>
     <xml name="vcfTypes">
