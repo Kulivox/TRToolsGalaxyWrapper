@@ -1,116 +1,145 @@
-<tool id="qcSTR" name="qcSTR" version="@TRTOOLS_VERSION@" python_template_version="3.5">
-    <description>qcSTR generates plots that are useful for diagnosing issues in TR calling.</description>
-    <macros>
-        <import>macros.xml</import>
-    </macros>
+<?xml version="1.0" ?>
+<tool id="qcSTR" name="QcSTR" version="@tool_version@">
+	<macros>
+		<import>macros.xml</import>
+	</macros>
+	<description>qcSTR generates plots that are useful for diagnosing issues in TR calling.</description>
+	<expand macro="requirements"/>
+	<command detect_errors="exit_code"><![CDATA[qcSTR
 
-    <expand macro="requirements"/>
-    <command detect_errors="aggressive"><![CDATA[
-        qcSTR
-            --vcf '$main_params.vcf'
-            --vcftype '$main_params.vcftype'
-            --out '$main_params.out'
-            #if $opt_basic.samples:
-                --samples '$opt_basic.samples'
-            #end if
+## vcf definition
+#if $required_arguments.vcf:
+   --vcf $required_arguments.vcf
+#end if
+## end vcf definition
+## out definition
+#if $required_arguments.out:
+   --out $required_arguments.out
+#end if
+## end out definition
+## vcftype definition
+#if $optional_input_arguments.vcftype:
+   --vcftype $optional_input_arguments.vcftype
+#end if
+## end vcftype definition
+## samples definition
+#if $optional_input_arguments.samples:
+   --samples $optional_input_arguments.samples
+#end if
+## end samples definition
+## period definition
+#if $optional_input_arguments.period:
+   --period $optional_input_arguments.period
+#end if
+## end period definition
+## quality_repeat definition
+#for $item in $quality_plot_options.quality_repeat:
+      ## quality definition
+   #if $item.quality:
+   --quality
+   #end if
+   ## end quality definition
 
-            #if $opt_basic.period:
-                --period $opt_basic.period
-            #end if
+#end for
+## end quality_repeat definition
+## quality_ignore_no_call definition
+#if $quality_plot_options.quality_ignore_no_call:
+   --quality-ignore-no-call
+#end if
+## end quality_ignore_no_call definition
+## refbias_metric definition
+#if $reference_bias_plot_options.refbias_metric:
+   --refbias-metric $reference_bias_plot_options.refbias_metric
+#end if
+## end refbias_metric definition
+## refbias_mingts definition
+#if $reference_bias_plot_options.refbias_mingts:
+   --refbias-mingts $reference_bias_plot_options.refbias_mingts
+#end if
+## end refbias_mingts definition
+## refbias_xrange_min definition
+#if $reference_bias_plot_options.refbias_xrange_min:
+   --refbias-xrange-min $reference_bias_plot_options.refbias_xrange_min
+#end if
+## end refbias_xrange_min definition
+## refbias_xrange_max definition
+#if $reference_bias_plot_options.refbias_xrange_max:
+   --refbias-xrange-max $reference_bias_plot_options.refbias_xrange_max
+#end if
+## end refbias_xrange_max definition
+## refbias_binsize definition
+#if $reference_bias_plot_options.refbias_binsize:
+   --refbias-binsize $reference_bias_plot_options.refbias_binsize
+#end if
+## end refbias_binsize definition
+## numrecords definition
+#if $debug_group.numrecords:
+   --numrecords $debug_group.numrecords
+#end if
+## end numrecords definition
+## version definition
+#if $version05e4.version:
+   --version
+#end if
+## end version definition
+1>$stdout 2>$stderr
+]]></command>
 
-            #for $q in $opt_advanced.quality:
-                --quality '$q.quality'
-            #end for
 
-            #if $opt_advanced.refbias_binsize:
-                --refbias-binsize $opt_advanced.refbias_binsize
-            #end if
+	<inputs>
+		<section name="required_arguments" title="Required arguments" expanded="false">
+			<param argument="--vcf" type="data" format="vcf" optional="false" label="vcf" help="VCF file to analyze."/>
+			<param argument="--out" type="text" optional="false" label="out" help="Output prefix for files generated"/>
+		</section>
+		<section name="optional_input_arguments" title="Optional input arguments" expanded="false">
+			<param argument="--vcftype" type="select" optional="true" label="vcftype" help="Genotyper that was used to create this VCF input">
+				<expand macro="vcfTypes"/>
+			</param>
+			<param argument="--samples" type="text" optional="true" label="samples" help="File containing list of samples to include"/>
+			<param argument="--period" type="integer" optional="true" label="period" help="Only consider repeats with this motif length"/>
+		</section>
+		<section name="quality_plot_options" title="Quality plot options" expanded="false">
+			<repeat name="quality_repeat" title="quality_repeat">
+				<param argument="--quality" type="boolean" optional="true" label="quality" help="Which quality plot(s) to produce. May be specified more than  once. See the README for more info">
+					<option value="per-locus">Per-locus</option>
+					<option value="sample-stratified">Sample-stratified</option>
+					<option value="per-sample">Per-sample</option>
+					<option value="locus-stratified">Locus-stratified</option>
+					<option value="per-call">Per-call</option>
+				</param>
+			</repeat>
+			<param argument="--quality-ignore-no-call" type="boolean" optional="true" label="quality_ignore_no_call" help="Exclude no-calls and calls without quality scores from quality graph distributions instead of the default, which is to include them as zero quality calls. Setting this can cause the plotting to crash if it reduces the number of valid calls (in a strata) to &lt;= 1"/>
+		</section>
+		<section name="reference_bias_plot_options" title="Reference bias plot options" expanded="false">
+			<param argument="--refbias-metric" type="text" optional="true" label="refbias_metric" help="Which metric to use for the y-axis on the reference bias plot.">
+				<option value="mean">Mean</option>
+				<option value="median">Median</option>
+			</param>
+			<param argument="--refbias-mingts" type="integer" optional="true" label="refbias_mingts" help="Don't compute points for the reference bias plot based on fewer than this many genotypes"/>
+			<param argument="--refbias-xrange-min" type="integer" optional="true" label="refbias_xrange_min" help="Minimum x-axis value (bp) to show on the reference bias plot"/>
+			<param argument="--refbias-xrange-max" type="integer" optional="true" label="refbias_xrange_max" help="Maximum x-axis value (bp) to show on the reference bias plot"/>
+			<param argument="--refbias-binsize" type="integer" optional="true" label="refbias_binsize" help="Size (bp) of x-axis bins for the reference bias plot"/>
+		</section>
+		<section name="debug_group" title="Debug group" expanded="false">
+			<param argument="--numrecords" type="integer" optional="true" label="numrecords" help="Only process this many records"/>
+		</section>
+		<section name="version05e4" title="Version" expanded="false">
+			<param argument="--version" type="boolean" optional="true" label="version" help="show program's version number and exit"/>
+		</section>
+	</inputs>
 
-            #if $opt_advanced.refbias_metric:
-                --refbias-metric $opt_advanced.refbias_metric
-            #end if
 
-            #if $opt_advanced.refbias_mingts:
-                --refbias-mingts $opt_advanced.refbias_mingts
-            #end if
-
-            #if $opt_advanced.refbias_xrange_min:
-                --refbias-mingts $opt_advanced.refbias_xrange_min
-            #end if
-
-            #if $opt_advanced.refbias_xrange_max:
-                --refbias-mingts $opt_advanced.refbias_xrange_max
-            #end if
-            1> $stdout 2> $stderr
-    ]]></command>
-    <inputs>
-        <section name="main_params" title="Most important parameters" expanded="true">
-            <param argument="--vcf" name="vcf" type="data" format="vcf.gz" label="VCF file" help="VCF file to analyze"/>
-            <param argument="--out" name="out" type="text" label="Output name prefix"
-                   help="Output prefix for files generated"/>
-             <param argument="--vcftype" name="vcftype" type="select" label="Variant caller type of input VCF" help="
-                        Which type of VCF to restrict the input to, or 'auto' for no restrction (default: auto)">
-                <option value="auto">Auto</option>
-                <option value="gangstr">GangSTR</option>
-                <option value="advntr">Advntr</option>
-                <option value="hipstr">HipSTR</option>
-                <option value="eh">Expansion hunter</option>
-                <option value="popstr">PopSTR</option>
-            </param>
-        </section>
-        <section name="opt_basic" title="Basic optional arguments" expanded="false">
-
-            <param argument="--samples" type="data" format="txt" optional="true" label="List of samples to include"
-                   help="File containing list of samples to include.
-                     If not specified, all samples are used. Samples in the list that are not included in the input vcf or
-                     are misspelled are silently ignored"/>
-            <param argument="--period" type="integer" optional="true" label="Restrict to TRs with this motif length"
-                   help="Restrict to TRs with this motif length. e.g. to restrict to dinucleotide repeats, use --period 2"/>
-        </section>
-        <section name="opt_advanced" title="Plot related optional arguments" expanded="false">
-            <repeat name="quality" title="Quality plots">
-                <param argument="--quality" type="select" label="type of quality plot to output"
-                       help="his option determines if the plot is stratified and what distribution the y-axis represents.
-                        The x-axis is always the quality score and the y-axis is always a decreasing CDF.
-                         This can be specified multiple times to produce
-                          multiple plots (e.g. --quality per-locus --quality per-sample).
-                           Each plot will have the specified type appended to the output filename.">
-                    <option value="per-locus">Per locus</option>
-                    <option value="sample-stratified">Sample stratified</option>
-                    <option value="per-sample">Per sample</option>
-                    <option value="locus-stratified">Locus stratified</option>
-                    <option value="per-call">Per call</option>
-                </param>
-            </repeat>
-            <param argument="--refbias-binsize" name="refbias_binsize" optional="true" type="integer"
-                   help="Sets the binsize (in bp) used to bin x-axis values, which give the reference TR length. Default=5."/>
-            <param argument="--refbias-metric" name="refbias_metric" type="select" optional="true" help="Determines which metric to use to summarize the
-            reference bias in each bin. Default=mean. Must be one of: mean or median.">
-                <option value="mean">Mean</option>
-                <option value="median">Median</option>
-            </param>
-            <param argument="--refbias-mingts" name="refbias_mingts" optional="true" type="integer" help="Exclude points computed
-             using fewer than this many genotypes.
-             This option is meant to avoid plotting outlier points driven by bins with small numbers
-              of TRs with that reference length. Default=100."/>
-            <param argument="--refbias-xrange-min" name="refbias_xrange_min" optional="true" type="integer"
-                   help="Exclude points corresponding to TRs with reference length less than this value."/>
-            <param argument="--refbias-xrange-max" name="refbias_xrange_max" optional="true" type="integer"
-                   help="Exclude points corresponding to TRs with reference length greater than this value."/>
-        </section>
-
-    </inputs>
-    <outputs>
-        <data name="stdout" format="txt" />
+	<outputs>
+		<data name="stdout" format="txt" />
         <data name="stderr" format="txt" />
         <collection format="pdf" name="qcSTROutput" type="list" label="Output of qcSTR">
             <discover_datasets format="pdf" pattern="(?P&lt;designation&gt;.+)\.pdf"/>
         </collection>
+	</outputs>
 
-    </outputs>
 
-    <tests>
-        <test>
+	<tests>
+         <test>
             <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
             <param name="out" value="test"/>
             <param name="vcftype" value="hipstr"/>
@@ -139,79 +168,62 @@
                 </element>
             </output_collection>
         </test>
-
     </tests>
 
-    <help>
-        usage: Tool for generating various QC plots for TR callsets
-        
-        Required arguments:
-          --vcf VCF             VCF file to analyze.
-          --out OUT             Output prefix for files generated
-        
-        Optional input arguments:
-          --vcftype {gangstr,advntr,hipstr,eh,popstr,auto}
-                                Which type of VCF to restrict the input to, or 'auto'
-                                for no restrction (default: auto)
 
-          --samples SAMPLES     File containing list of samples to include
+	<help>usage: main.py [-h] --vcf VCF --out OUT [--vcftype {##!!## Name trh could not be loaded}] [--samples SAMPLES] [--period PERIOD] [--quality {per-locus,sample-stratified,per-sample,locus-stratified,per-call}]
+               [--quality-ignore-no-call] [--refbias-metric {mean,median}] [--refbias-mingts REFBIAS_MINGTS] [--refbias-xrange-min REFBIAS_XRANGE_MIN] [--refbias-xrange-max REFBIAS_XRANGE_MAX]
+               [--refbias-binsize REFBIAS_BINSIZE] [--numrecords NUMRECORDS] [--version]
 
-          --period PERIOD       Only consider repeats with this motif length
-                  
-        Quality plot options:
-          --quality {per-locus,sample-stratified,per-sample,locus-stratified,per-call}
-                                Which quality plot(s) to produce. May be specified
-                                more than once. See the README for more info (default:
-                                [])
+options:
+  -h, --help            show this help message and exit
 
-          --quality-ignore-no-call
-                                Exclude no-calls and calls without quality scores from
-                                quality graph distributions instead of the default,
-                                which is to include them as zero quality calls.
-                                Setting this can cause the plotting to crash if it
-                                reduces the number of valid calls (in a strata) to &lt;=
-                                1 (default: False)
-        
-        Reference bias plot options:
-          --refbias-metric {mean,median}
-                                Which metric to use for the y-axis on the reference
-                                bias plot. (default: mean)
+Required arguments:
+  --vcf VCF             VCF file to analyze.
+  --out OUT             Output prefix for files generated
 
-          --refbias-mingts REFBIAS_MINGTS
-                                Don't compute points for the reference bias plot based
-                                on fewer than this many genotypes (default: 100)
+Optional input arguments:
+  --vcftype {##!!## Name trh could not be loaded}
+                        Which type of VCF to restrict the input to, or 'auto' for no restrction
+  --samples SAMPLES     File containing list of samples to include
+  --period PERIOD       Only consider repeats with this motif length
 
-          --refbias-xrange-min REFBIAS_XRANGE_MIN
-                                Minimum x-axis value (bp) to show on the reference
-                                bias plot (default: 0)
+Quality plot options:
+  --quality {per-locus,sample-stratified,per-sample,locus-stratified,per-call}
+                        Which quality plot(s) to produce. May be specified more than once. See the README for more info
+  --quality-ignore-no-call
+                        Exclude no-calls and calls without quality scores from quality graph distributions instead of the default, which is to include them as zero quality calls. Setting this can cause the plotting to crash if
+                        it reduces the number of valid calls (in a strata) to &lt;= 1
 
-          --refbias-xrange-max REFBIAS_XRANGE_MAX
-                                Maximum x-axis value (bp) to show on the reference
-                                bias plot (default: 100)
+Reference bias plot options:
+  --refbias-metric {mean,median}
+                        Which metric to use for the y-axis on the reference bias plot.
+  --refbias-mingts REFBIAS_MINGTS
+                        Don't compute points for the reference bias plot based on fewer than this many genotypes
+  --refbias-xrange-min REFBIAS_XRANGE_MIN
+                        Minimum x-axis value (bp) to show on the reference bias plot
+  --refbias-xrange-max REFBIAS_XRANGE_MAX
+                        Maximum x-axis value (bp) to show on the reference bias plot
+  --refbias-binsize REFBIAS_BINSIZE
+                        Size (bp) of x-axis bins for the reference bias plot
 
-          --refbias-binsize REFBIAS_BINSIZE
-                                Size (bp) of x-axis bins for the reference bias plot
-                                (default: 5)
-        
-        Debug group:
-          --numrecords NUMRECORDS
-                                Only process this many records
-        
-        Version:
-          --version             show program's version number and exit
-    </help>
+Debug group:
+  --numrecords NUMRECORDS
+                        Only process this many records
+
+Version:
+  --version             show program's version number and exit
+</help>
 
 
-    <citations>
-        <citation type="bibtex">
-            @misc{TRTools: a toolkit for genome-wide analysis of tandem repeats,
-            author = {Nima Mousavi, Jonathan Margoliash, Neha Pusarla, Shubham Saini, Richard Yanicky, Melissa Gymrek},
-            year = {2020},
-            title = {TRTools},
-            publisher = {GitHub},
-            journal = {GitHub repository},
-            url = {https://github.com/gymreklab/trtools},
-            }
-        </citation>
-    </citations>
+	<citations>
+		<citation type="bibtex">@misc{TRTools: a toolkit for genome-wide analysis of tandem repeats,
+      author = {Nima Mousavi, Jonathan Margoliash, Neha Pusarla, Shubham Saini, Richard Yanicky, Melissa Gymrek},
+      year = {2020},
+      title = {TRTools},
+      publisher = {GitHub},
+      journal = {GitHub repository},
+      url = {https://github.com/gymreklab/trtools},
+}</citation>
+	</citations>
 </tool>
