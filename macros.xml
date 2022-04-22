@@ -1,39 +1,28 @@
 <macros>
-    <token name="@TRTOOLS_VERSION@">4.0.1</token>
-    <token name="@SAMTOOLS_VERSION@">1.14</token>
-    <token name="@PROFILE@">19.01</token>
+    <token name="@tool_version@">4.0.2</token>
+    <token name="@INDEX_VCFS@"><![CDATA[##prepare input and indices
+#import os
 
+#def get_new_vcf_names(vcf_paths):
+    #set result = []
+    #for $vcf in $vcf_paths:
+        #set $split_path = $os.path.basename(vcf)
+        #set new_file_name = f"tmp_{split_path.split('.')[0]}.vcf.gz"
+        $result.append($new_file_name)
+    #end for
+    #return $result
+#end def
+#def index_vcfs(old_paths, new_paths):
+    #for ($left, $right) in $zip($old_paths, $new_paths):
+        ln -sfn $left $right &&
+        tabix -f -p  vcf $right &&
+    #end for
+#end def]]></token>
     <xml name="requirements">
-        <requirements>
-            <requirement type="package" version="@TRTOOLS_VERSION@">trtools</requirement>
-            <requirement type="package" version="@SAMTOOLS_VERSION@">samtools</requirement>
-        </requirements>
+        <requirement type="package" version="4.0.2">trtools</requirement>
+        <requirement type="package" version="1.14">samtools</requirement>
     </xml>
-    <token name="@INDEX_VCFS@"><![CDATA[
-        ##prepare input and indices
-        #import os
-        
-        #def get_new_vcf_names(vcf_paths):
-            #set result = []
-            #for $vcf in $vcf_paths:
-                #set $split_path = $os.path.basename(vcf)
-                #set new_file_name = f"tmp_{split_path.split('.')[0]}.vcf.gz"
-                $result.append($new_file_name)
-            #end for
-
-            #return $result
-        #end def
-
-        #def index_vcfs(old_paths, new_paths):
-            #for ($left, $right) in $zip($old_paths, $new_paths):
-                ln -sfn $left $right &&
-                tabix -f -p  vcf $right &&
-            #end for
-        #end def
-
-
-    ]]></token>
-    <xml name="vcfTypes" >
+    <xml name="vcfTypes">
         <option value="auto">Auto</option>
         <option value="gangstr">GangSTR</option>
         <option value="advntr">Advntr</option>
