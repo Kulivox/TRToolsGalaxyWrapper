@@ -9,6 +9,7 @@
     </macros>
 
     <expand macro="requirements"/>
+    <version_command>dumpSTR --version</version_command>
     <command detect_errors="exit_code"><![CDATA[dumpSTR
 ## h definition
 #if $options.h:

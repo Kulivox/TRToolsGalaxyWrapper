@@ -9,6 +9,7 @@
     </macros>
 
     <expand macro="requirements"/>
+    <version_command>mergeSTR --version</version_command>
     <command detect_errors="exit_code"><![CDATA[
     @INDEX_VCFS@
     #set $inputs = [str(vcf['vcf']) for vcf in $required_arguments.vcfs]

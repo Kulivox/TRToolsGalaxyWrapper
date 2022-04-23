@@ -5,6 +5,7 @@
 		<import>macros.xml</import>
 	</macros>
 	<expand macro="requirements"/>
+    <version_command>qcSTR --version</version_command>
 	<command detect_errors="exit_code"><![CDATA[qcSTR
 
 ## vcf definition

@@ -8,6 +8,7 @@
     </macros>
 
     <expand macro="requirements"/>
+    <version_command>compareSTR --version</version_command>
     <command detect_errors="exit_code"><![CDATA[
 	@INDEX_VCFS@
     #set $old_names = [$str($required_arguments.vcf1), $str($required_arguments.vcf2)]
