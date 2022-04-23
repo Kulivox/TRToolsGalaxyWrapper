@@ -1,0 +1,6 @@
+categories: []
+description: Utilities for filtering, quality control and analysis of tandem repeats
+  downstream of genotyping them from next-generation sequencing
+name: trtools
+owner: michal_klinka
+remote_repository_url: https://github.com/Kulivox/TRToolsGalaxyWrapper
