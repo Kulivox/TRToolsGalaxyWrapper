@@ -103,7 +103,8 @@
 
 
     <tests>
-        <section name="main_params">
+        <test>
+            <section name="main_params">
             <param name="out" value="test_result"/>
             <param name="vcftype" value="hipstr"/>
             <repeat name="vcfs">
@@ -127,31 +128,31 @@
             </discovered_dataset>
         </output>
         <output name="stderr" file="stderr.txt"/>
+        </test>
     </tests>
 
 
-    <help>usage: main.py [-h] --vcfs VCFS --out OUT [--vcftype VCFTYPE]
-        [--update-sample-from-file] [--verbose] [--quiet] [--version]
+    <help>sage: pygalgen [-h] --vcfs VCFS --out OUT [--vcftype VCFTYPE] [--update-sample-from-file] [--verbose] [--quiet]
+                [--version]
 
-        options:
-        -h, --help show this help message and exit
+options:
+  -h, --help            show this help message and exit
 
-        Required arguments:
-        --vcfs VCFS Comma-separated list of VCF files to merge (must be sorted,
-        bgzipped and indexed)
-        --out OUT Prefix to name output files
-        --vcftype VCFTYPE ##!!## Name trh could not be loaded
+Required arguments:
+  --vcfs VCFS           Comma-separated list of VCF files to merge (must be sorted, bgzipped and indexed)
+  --out OUT             Prefix to name output files
+  --vcftype VCFTYPE     ##!!## Name trh could not be loaded
 
-        Special merge options:
-        --update-sample-from-file
-        Use file names, rather than sample header names, when merging
+Special merge options:
+  --update-sample-from-file
+                        Use file names, rather than sample header names, when merging
 
-        Optional arguments:
-        --verbose Print out extra info
-        --quiet Don't print out anything
+Optional arguments:
+  --verbose             Print out extra info
+  --quiet               Don't print out anything
 
-        Version:
-        --version show program's version number and exit
+Version:
+  --version             show program's version number and exit
     </help>
 
 
