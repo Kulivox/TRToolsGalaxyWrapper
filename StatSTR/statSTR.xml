@@ -211,48 +211,47 @@
     </tests>
 
 
-    <help>usage: main.py [-h] --vcf VCF --out OUT [--vcftype VCFTYPE] [--precision PRECISION] [--samples SAMPLES]
-        [--sample-prefixes SAMPLE_PREFIXES] [--region REGION] [--thresh] [--afreq] [--acount] [--hwep] [--het]
-        [--entropy] [--mean]
-        [--mode] [--var] [--numcalled] [--use-length] [--plot-afreq] [--version]
+    <help>usage: pygalgen [-h] --vcf VCF --out OUT [--vcftype VCFTYPE] [--precision PRECISION] [--samples SAMPLES]
+                [--sample-prefixes SAMPLE_PREFIXES] [--region REGION] [--thresh] [--afreq] [--acount] [--hwep] [--het]
+                [--entropy] [--mean] [--mode] [--var] [--numcalled] [--use-length] [--plot-afreq] [--version]
 
-        options:
-        -h, --help show this help message and exit
+options:
+  -h, --help            show this help message and exit
 
-        Input/output:
-        --vcf VCF Input STR VCF file
-        --out OUT Output file prefix. Use stdout to print file to standard output. In addition, if not stdout then
-        timing diagnostics are print to stdout.
-        --vcftype VCFTYPE ##!!## Name trh could not be loaded
-        --precision PRECISION
-        How much precision to use when printing decimals
+Input/output:
+  --vcf VCF             Input STR VCF file
+  --out OUT             Output file prefix. Use stdout to print file to standard output. In addition, if not stdout
+                        then timing diagnostics are print to stdout.
+  --vcftype VCFTYPE     Genotyper that created the VCF file
+  --precision PRECISION
+                        How much precision to use when printing decimals
 
-        Filtering group:
-        --samples SAMPLES File containing list of samples to include. Or a comma-separated list of files to compute
-        stats separate for each group of samples
-        --sample-prefixes SAMPLE_PREFIXES
-        Prefixes to name output for each samples group. By default uses 1,2,3 etc.
-        --region REGION Restrict to the region chrom:start-end. Requires file to bgzipped and tabix indexed.
+Filtering group:
+  --samples SAMPLES     File containing list of samples to include. Or a comma-separated list of files to compute
+                        stats separate for each group of samples
+  --sample-prefixes SAMPLE_PREFIXES
+                        Prefixes to name output for each samples group. By default uses 1,2,3 etc.
+  --region REGION       Restrict to the region chrom:start-end. Requires file to bgzipped and tabix indexed.
 
-        Stats group:
-        --thresh Output threshold field (max allele size, used for GangSTR strinfo).
-        --afreq Output allele frequencies
-        --acount Output allele counts
-        --hwep Output HWE p-values per loci.
-        --het Output the heterozygosity of each locus.
-        --entropy Output the entropy of each locus.
-        --mean Output mean of the allele frequencies.
-        --mode Output mode of the allele frequencies.
-        --var Output variance of the allele frequencies.
-        --numcalled Output number of samples called.
-        --use-length Calculate per-locus stats (het, HWE) collapsing alleles by length. This is implicitly true for
-        genotypers which only emit length based genotypes.
+Stats group:
+  --thresh              Output threshold field (max allele size, used for GangSTR strinfo).
+  --afreq               Output allele frequencies
+  --acount              Output allele counts
+  --hwep                Output HWE p-values per loci.
+  --het                 Output the heterozygosity of each locus.
+  --entropy             Output the entropy of each locus.
+  --mean                Output mean of the allele frequencies.
+  --mode                Output mode of the allele frequencies.
+  --var                 Output variance of the allele frequencies.
+  --numcalled           Output number of samples called.
+  --use-length          Calculate per-locus stats (het, HWE) collapsing alleles by length. This is implicitly true for
+                        genotypers which only emit length based genotypes.
 
-        Plotting group:
-        --plot-afreq Output allele frequency plot. Will only do for a maximum of 10 TRs.
+Plotting group:
+  --plot-afreq          Output allele frequency plot. Will only do for a maximum of 10 TRs.
 
-        Version:
-        --version show program's version number and exit
+Version:
+  --version             show program's version number and exit
     </help>
 
 
