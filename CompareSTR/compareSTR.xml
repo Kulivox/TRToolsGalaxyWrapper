@@ -1,4 +1,3 @@
-<?xml version="1.0" ?>
 <tool id="compareSTR" name="CompareSTR" version="@tool_version@">
     <description>CompareSTR compares different TR callsets generated on the same samples against the same reference
         panel. CompareSTR outputs overall, per-locus, and per-sample concordance information.
