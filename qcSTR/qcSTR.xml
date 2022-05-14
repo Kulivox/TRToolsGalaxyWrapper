@@ -172,9 +172,11 @@
     </tests>
 
 
-	<help>usage: main.py [-h] --vcf VCF --out OUT [--vcftype {##!!## Name trh could not be loaded}] [--samples SAMPLES] [--period PERIOD] [--quality {per-locus,sample-stratified,per-sample,locus-stratified,per-call}]
-               [--quality-ignore-no-call] [--refbias-metric {mean,median}] [--refbias-mingts REFBIAS_MINGTS] [--refbias-xrange-min REFBIAS_XRANGE_MIN] [--refbias-xrange-max REFBIAS_XRANGE_MAX]
-               [--refbias-binsize REFBIAS_BINSIZE] [--numrecords NUMRECORDS] [--version]
+	<help>usage: pygalgen [-h] --vcf VCF --out OUT [--vcftype VCF_TYPE] [--samples SAMPLES]
+                [--period PERIOD] [--quality {per-locus,sample-stratified,per-sample,locus-stratified,per-call}]
+                [--quality-ignore-no-call] [--refbias-metric {mean,median}] [--refbias-mingts REFBIAS_MINGTS]
+                [--refbias-xrange-min REFBIAS_XRANGE_MIN] [--refbias-xrange-max REFBIAS_XRANGE_MAX]
+                [--refbias-binsize REFBIAS_BINSIZE] [--numrecords NUMRECORDS] [--version]
 
 options:
   -h, --help            show this help message and exit
@@ -184,21 +186,21 @@ Required arguments:
   --out OUT             Output prefix for files generated
 
 Optional input arguments:
-  --vcftype {##!!## Name trh could not be loaded}
-                        Which type of VCF to restrict the input to, or 'auto' for no restrction
+  --vcftype VCF_TYPE    Which type of VCF to restrict the input to, or 'auto' for no restrction
   --samples SAMPLES     File containing list of samples to include
   --period PERIOD       Only consider repeats with this motif length
 
 Quality plot options:
-  --quality {per-locus,sample-stratified,per-sample,locus-stratified,per-call}
-                        Which quality plot(s) to produce. May be specified more than once. See the README for more info
+  --quality QUALITY     Which quality plot(s) to produce. May be specified more than once. See the README for more
+                        info (per-locus,sample-stratified,per-sample,locus-stratified,per-call)
   --quality-ignore-no-call
-                        Exclude no-calls and calls without quality scores from quality graph distributions instead of the default, which is to include them as zero quality calls. Setting this can cause the plotting to crash if
-                        it reduces the number of valid calls (in a strata) to &lt;= 1
+                        Exclude no-calls and calls without quality scores from quality graph distributions instead of
+                        the default, which is to include them as zero quality calls. Setting this can cause the
+                        plotting to crash if it reduces the number of valid calls (in a strata) to &lt;= 1
 
 Reference bias plot options:
-  --refbias-metric {mean,median}
-                        Which metric to use for the y-axis on the reference bias plot.
+  --refbias-metric METRIC
+                        Which metric to use for the y-axis on the reference bias plot. (mean,median)
   --refbias-mingts REFBIAS_MINGTS
                         Don't compute points for the reference bias plot based on fewer than this many genotypes
   --refbias-xrange-min REFBIAS_XRANGE_MIN
@@ -213,8 +215,7 @@ Debug group:
                         Only process this many records
 
 Version:
-  --version             show program's version number and exit
-</help>
+  --version             show program's version number and exit</help>
 
 
 	<citations>
