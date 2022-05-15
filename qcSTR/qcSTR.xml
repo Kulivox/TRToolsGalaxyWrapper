@@ -141,9 +141,14 @@
 
 	<tests>
          <test>
-            <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
-            <param name="out" value="test"/>
-            <param name="vcftype" value="hipstr"/>
+            <section name="required_arguments">
+               <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+               <param name="out" value="test"/>
+            </section>
+            <section name="optional_input_arguments">
+               <param name="vcftype" value="hipstr"/>
+            </section>
+            
             <output name="stdout" file="output.txt" />
             <output_collection name="qcSTROutput" type="list" count="3">
                 <element name="test-diffref-bias"  ftype="pdf">

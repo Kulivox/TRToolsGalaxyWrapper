@@ -177,15 +177,14 @@
 
     <tests>
         <test>
-            <section name="main_params">
+            <section name="input_output">
                 <param name="vcf" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
                 <param name="out" value="test_result"/>
                 <param name="vcftype" value="hipstr"/>
-            </section>
-            <section name="opt_basic">
                 <param name="precision" value="5"/>
             </section>
-            <section name="statistic_opt">
+            
+            <section name="stats_group">
                 <param name="thresh" value="true"/>
                 <param name="afreq" value="true"/>
                 <param name="acount" value="true"/>

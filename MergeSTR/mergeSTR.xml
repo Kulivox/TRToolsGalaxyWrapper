@@ -123,9 +123,9 @@
                 <assert_contents>
                     <has_size value="3106435" delta="100"/>
                     <has_text text="##fileformat=VCFv4.1"/>
-                    <has_n_lines n="9695"/>
+                    <has_n_lines n="9658"/>
                 </assert_contents>
-            </discovered_dataset>
+            </discovered_dataset>   
         </output>
         <output name="stderr" file="stderr.txt"/>
         </test>
