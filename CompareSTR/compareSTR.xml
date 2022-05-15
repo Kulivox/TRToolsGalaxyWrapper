@@ -182,18 +182,18 @@
 
     <tests>
         <test>
-            <section name="required">
-                <param name="vcf1" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
-                <param name="vcf2" value="NA12878_chr21_hipstr.sorted.vcf.gz"/>
+            <section name="required_arguments">
+                <param name="vcf1" value="NA12878_chr21_hipstr.sorted.vcf.gz" />
+                <param name="vcf2" value="NA12878_chr21_hipstr.sorted.vcf.gz" />
                 <param name="out" value="test_result"/>
             </section>
 
-            <section name="stratification">
+            <section name="metrics_to_stratify_results">
                 <param name="stratify_fields" value="DP,Q"/>
                 <param name="stratify_binsizes" value="0:50:5,0:1:0.1"/>
                 <param name="stratify_file" value="0"/>
             </section>
-            <section name="other">
+            <section name="optional_arguments">
                 <param name="verbose" value="true"/>
                 <param name="vcftype1" value="hipstr"/>
                 <param name="vcftype2" value="hipstr"/>
