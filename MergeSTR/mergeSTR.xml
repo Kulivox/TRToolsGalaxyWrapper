@@ -104,7 +104,7 @@
 
     <tests>
         <test>
-            <section name="main_params">
+            <section name="required_arguments">
             <param name="out" value="test_result"/>
             <param name="vcftype" value="hipstr"/>
             <repeat name="vcfs">
@@ -114,14 +114,14 @@
                 <param name="vcf" value="NA12891_chr21_hipstr.sorted.vcf.gz"/>
             </repeat>
         </section>
-        <section name="other">
+        <section name="optional_arguments">
             <param name="verbose" value="true"/>
         </section>
         <output name="stdout" file="stdout.txt">
             <discovered_dataset designation="test_result">
                 <!-- The vcf output itself can't be directly compared, because it contains the command that executed it, and that command is different for every run -->
                 <assert_contents>
-                    <has_size value="3106028" delta="100"/>
+                    <has_size value="3106435" delta="100"/>
                     <has_text text="##fileformat=VCFv4.1"/>
                     <has_n_lines n="9695"/>
                 </assert_contents>

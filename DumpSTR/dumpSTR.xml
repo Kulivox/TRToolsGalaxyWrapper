@@ -395,22 +395,20 @@
 
     <tests>
         <test>
-            <section name="main_params">
+            <section name="input_output">
                 <param name="vcf" value="NA12891_chr21_hipstr.sorted.vcf.gz"/>
                 <param name="out" value="test_result"/>
                 <param name="vcftype" value="hipstr"/>
                 <param name="zip" value="false"/>
             </section>
-            <section name="filter_opt">
+            <section name="locus_level_filters__tool_agnostic_">
                 <param name="min_locus_callrate" value="0.1"/>
                 <param name="use_length" value="true"/>
                 <param name="drop_filtered" value="true"/>
             </section>
-            <section name="filter_call_level">
-                <section name="hipstr_filters">
-                    <param name="hipstr_max_call_flank_indel" value="0.2"/>
-                    <param name="hipstr_min_call_Q" value="0.4"/>
-                </section>
+            <section name="call_level_filters_specific_to_hipstr_output">
+                  <param name="hipstr_max_call_flank_indel" value="0.2"/>
+                  <param name="hipstr_min_call_Q" value="0.4"/>
             </section>
 
             <output name="stdout" file="stdout.txt"/>
@@ -420,9 +418,9 @@
                 <discovered_dataset designation="test_result.samplog" file="test_result.samplog.tab"/>
                 <discovered_dataset designation="test_result">
                     <assert_contents>
-                        <has_size value="4061730" delta="200"/>
+                        <has_size value="4062163" delta="1000"/>
                         <has_text text="##fileformat=VCFv4.1"/>
-                        <has_n_lines n="9046"/>
+                        <has_n_lines n="9047" delta="1"/>
                     </assert_contents>
                 </discovered_dataset>
             </output>
